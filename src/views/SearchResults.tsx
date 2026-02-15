@@ -15,11 +15,7 @@ import { useGetCitiesQuery, useLazyGetToursQuery } from "../features/apiSlice";
 import { Tour } from "../models/Tour";
 import { RootState } from "..";
 import SearchParamSync from "../components/SearchParamSync";
-import {
-  boundsUpdated,
-  cityUpdated,
-  mapUpdated,
-} from "../features/searchSlice";
+import { cityUpdated } from "../features/searchSlice";
 import { useAppDispatch } from "../hooks";
 import TourCardContainer from "../components/TourCardContainer";
 import Search from "../components/Search/Search";
@@ -261,14 +257,7 @@ export default function SearchResults() {
       )}
       {totalToursHeader()}
       {!!tours && tours.length > 0 && renderCardContainer()}
-      <MapBtn
-        handleClick={() => {
-          if (showMap) {
-            dispatch(boundsUpdated(null));
-          }
-          dispatch(mapUpdated(!showMap));
-        }}
-      />
+      <MapBtn />
     </div>
   );
 }

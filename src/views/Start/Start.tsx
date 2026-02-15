@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
 import { useIsMobile } from "../../utils/muiUtils";
 import {
   usePageHeader,
@@ -24,7 +23,6 @@ import Typography from "@mui/material/Typography";
 
 // Dynamische Imports für nicht-kritische Komponenten
 import KPIContainer from "../../components/KPIContainer";
-import MapBtn from "../../components/Search/MapBtn";
 import Footer from "../../components/Footer/Footer";
 
 export default function Start() {
@@ -175,11 +173,6 @@ export default function Start() {
                   </Box>
                 </Box>
               </Box>
-              <Link
-                to={`/search/?map=true` + (provider ? `&p=${provider}` : "")}
-              >
-                <MapBtn />
-              </Link>
             </>
           )}
           <Footer />
