@@ -235,13 +235,26 @@ export default function Search({
                 <IconButton
                   onClick={() => setFilterOn(true)}
                   aria-label="Filter"
+                  sx={{
+                    backgroundColor: "#4992FF",
+                    color: "white",
+                    width: 40,
+                    height: 40,
+                    transition: "all 0.2s ease-in-out",
+                    boxShadow: "0 2px 8px rgba(73, 146, 255, 0.3)",
+                    "&:hover": {
+                      transform: "scale(1.08)",
+                      backgroundColor: activeFilter ? "#0D47A1" : "#387EE0",
+                      boxShadow: "0 4px 12px rgba(73, 146, 255, 0.4)",
+                    },
+                  }}
                 >
                   <CustomIcon
                     name="filterIcon"
                     style={{
                       transition: "stroke 0.3s",
                       strokeWidth: 1.25,
-                      stroke: activeFilter ? "#fff" : "#101010",
+                      stroke: "#fff",
                       transform: "scale(0.675)",
                     }}
                   />
