@@ -42,14 +42,13 @@ export default function CustomSelect({
   const suggestions =
     searchString.length < 3 ? [] : (suggestionsResult.data?.items ?? []);
   const navigate = useNavigate();
-  const debouncedTrigger = useMemo(
-    () => debounce(triggerGetSuggestions, 300),
-    [triggerGetSuggestions],
-  );
+  const debouncedTrigger = useMemo(() => {
+    return debounce(triggerGetSuggestions, 300);
+  }, [triggerGetSuggestions]);
 
   useEffect(() => {
     return () => debouncedTrigger.cancel();
-  });
+  }, [debouncedTrigger]);
 
   const handleSelect = (phrase: string) => {
     //if search phrase corresponds to a city, set the city
