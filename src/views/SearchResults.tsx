@@ -214,7 +214,7 @@ export default function SearchResults() {
       <Box
         className={"search-result-header-container"}
         sx={{
-          pb: "30px",
+          pb: { xs: "150px", sm: "30px" },
           zIndex: 10,
           position: "relative",
         }}
@@ -265,7 +265,7 @@ export default function SearchResults() {
       {!!allCities && allCities.length > 0 && (
         <Box
           sx={{
-            mt: "-30px",
+            mt: { xs: "-154px", sm: "-30px" },
             display: "flex",
             justifyContent: "center",
             position: "relative",

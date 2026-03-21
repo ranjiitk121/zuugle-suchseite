@@ -26,7 +26,11 @@ export default function AutocompleteCitySelection({
 
   return (
     <Autocomplete
-      sx={{ "& .MuiAutocomplete-clearIndicator": { display: "none" } }}
+      sx={{
+        "& .MuiAutocomplete-clearIndicator": { display: "none" },
+        "& .MuiAutocomplete-inputRoot": { paddingRight: "27px !important" },
+        "& .MuiAutocomplete-endAdornment": { right: "9px" },
+      }}
       slotProps={{
         paper: { sx: { borderRadius: 3 } },
         listbox: { sx: { borderRadius: 3 } },

@@ -10,7 +10,6 @@ import {
 } from "../../utils/map_utils";
 import "./popup-style.css";
 import { getTopLevelDomain } from "../../utils/globals";
-import { useIsMobile } from "../../utils/muiUtils";
 import { Tour } from "../../models/Tour";
 import { Marker } from "../../models/mapTypes";
 import { RootState } from "../..";
@@ -43,7 +42,6 @@ export default function TourMapContainer({
   markers,
   isLoading,
 }: TourMapContainerProps) {
-  const isMobile = useIsMobile();
   const [triggerTourDetails, { data: tourDetails }] = useLazyGetTourQuery();
   const [triggerGPX] = useLazyGetGPXQuery();
   const domain = getTopLevelDomain();
@@ -190,7 +188,7 @@ export default function TourMapContainer({
   return (
     <Box
       style={{
-        height: !isMobile ? "calc(70vh - 50px)" : "calc(60vh - 50px)",
+        height: "600px",
         width: "100%",
         position: "relative",
         overflow: "hidden",
