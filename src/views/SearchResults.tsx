@@ -33,6 +33,7 @@ import { CustomIcon } from "../icons/CustomIcon";
 import { hasContent } from "../utils/globals";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
+import Filter from "../components/Filter/Filter";
 
 export default function SearchResults() {
   const { t } = useTranslation();
@@ -150,10 +151,6 @@ export default function SearchResults() {
     <Box
       className="cards-container"
       sx={{
-        marginTop: {
-          xs: marginTopCards,
-          md: marginTopCards,
-        },
         padding: "25px",
       }}
     >
@@ -165,13 +162,11 @@ export default function SearchResults() {
     </Box>
   );
 
-  const marginTopCards = showMap ? "20px" : "140px";
-
   const totalToursHeader = () => (
     <Box className={"header-line-main"} sx={{ width: "100%" }}>
       <Box
         sx={{
-          paddingTop: showMap ? "10px" : "35px",
+          paddingTop: showMap ? "12px" : "2px",
           paddingBottom: "5.5px",
           display: "flex",
           alignItems: "center",
@@ -215,7 +210,15 @@ export default function SearchResults() {
   return (
     <div>
       <SearchParamSync isSearchResultsPage={true} />
-      <Box sx={{ width: "100%" }} className={"search-result-header-container"}>
+      <Filter showFilter={filterOn} setShowFilter={setFilterOn} />
+      <Box
+        className={"search-result-header-container"}
+        sx={{
+          pb: { xs: "150px", sm: "30px" },
+          zIndex: 10,
+          position: "relative",
+        }}
+      >
         {!!directLink && (
           <Box className={"seo-bar"}>
             <Typography
@@ -229,76 +232,53 @@ export default function SearchResults() {
             </Typography>
           </Box>
         )}
-        <Box className="newHeader" height={"100px"} position={"relative"}>
-          <Box
-            component={"div"}
-            className="rowing blueDiv"
-            sx={{
-              height: "100%",
-              boxSizing: "border-box",
-              py: 0,
-              px: {
-                xs: "15px",
-                sm: "30px",
-              },
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Box sx={{ mr: "16px", cursor: "pointer" }}>
-                <Link
-                  to={"/" + (provider ? `?p=${provider}` : "")}
-                  aria-label={t("start.zurueck")}
-                >
-                  <CustomIcon
-                    name="arrowBefore"
-                    style={{ stroke: "#fff", width: "34px", height: "34px" }}
-                  />
-                </Link>
-              </Box>
-              <DomainMenu />
-            </Box>
-            <LanguageMenu />
-          </Box>
-          {!!allCities && allCities.length > 0 && (
-            <Box
-              alignItems={"center"}
-              justifyContent={"center"}
-              display="inline-block"
-              sx={{
-                position: "absolute",
-                bottom: "0",
-                left: "50%",
-                transform: "translate(-50%,50%)",
-                backgroundColor: "#FFF",
-                borderRadius: "15px",
-                padding: "12px 24px",
-                border: "2px solid #ddd",
-                boxShadow: "rgba(100, 100, 111, 0.3) 0px 3px 20px 0px",
-                boxSizing: "border-box",
-                width: {
-                  md: "600px",
-                  lg: "600px",
-                },
-                maxWidth: {
-                  xs: "325px",
-                  md: "600px",
-                },
-              }}
-            >
-              <Box className={"colCenter"}>
-                <Search
-                  pageKey="search"
-                  isSearchResultsPage={true}
-                  setFilterOn={setFilterOn}
-                  filterOn={filterOn}
+        <Box
+          component={"div"}
+          className="rowing"
+          sx={{
+            height: "100%",
+            boxSizing: "border-box",
+            py: "15px",
+            px: {
+              xs: "15px",
+              sm: "30px",
+            },
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={{ mr: "16px", cursor: "pointer" }}>
+              <Link
+                to={"/" + (provider ? `?p=${provider}` : "")}
+                aria-label={t("start.zurueck")}
+              >
+                <CustomIcon
+                  name="arrowBefore"
+                  style={{ stroke: "#fff", width: "34px", height: "34px" }}
                 />
-              </Box>
+              </Link>
             </Box>
-          )}
+            <DomainMenu />
+          </Box>
+          <LanguageMenu />
         </Box>
-        {!showMap && totalToursHeader()}
       </Box>
-
+      {!!allCities && allCities.length > 0 && (
+        <Box
+          sx={{
+            mt: { xs: "-154px", sm: "-30px" },
+            display: "flex",
+            justifyContent: "center",
+            position: "relative",
+            backgroundColor: "#f7f7f7",
+          }}
+        >
+          <Search
+            pageKey="search"
+            isSearchResultsPage={true}
+            setFilterOn={setFilterOn}
+          />
+        </Box>
+      )}
       {showMap && (
         <Box className={"map-container"}>
           <Suspense
