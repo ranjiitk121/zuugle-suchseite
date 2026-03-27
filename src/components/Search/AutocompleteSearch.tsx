@@ -17,6 +17,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import SearchSuggestions from "./SearchSuggestions";
+import { filterUpdated } from "../../features/filterSlice";
 
 export default function AutocompleteSearch({
   inputVariant,
@@ -36,6 +37,7 @@ export default function AutocompleteSearch({
   const currentSearch = useSelector(
     (state: RootState) => state.search.searchWithType,
   );
+  const filter = useSelector((state: RootState) => state.filter);
   const city = useSelector((state: RootState) => state.search.city);
   const language = useSelector((state: RootState) => state.search.language);
   const provider = useSelector((state: RootState) => state.search.provider);
@@ -65,23 +67,25 @@ export default function AutocompleteSearch({
       if (matchedCity) {
         dispatch(cityUpdated(matchedCity));
       }
-    } else if (search.type === "range") {
-      // TODO set filter
-    } else {
-      dispatch(searchWithTypeUpdated(search));
     }
-
-    if (!isSearchPage) {
+    if (isSearchPage) {
+      if (search.type === "range") {
+        dispatch(filterUpdated({ ...filter, ranges: [search.term] }));
+        dispatch(searchWithTypeUpdated(null));
+      } else {
+        dispatch(searchWithTypeUpdated(search));
+      }
+    } else {
       const searchParams = new URLSearchParams();
       if (provider) {
-        searchParams.set("provider", provider);
+        searchParams.set("p", provider);
       }
       if (search.type === "range") {
         searchParams.set("range", search.term);
-      } else if (search.type !== "term") {
+      } else {
         searchParams.set("search_type", search.type);
+        searchParams.set("search", search.term);
       }
-      searchParams.set("search", search.term);
       navigate(`/search?${searchParams.toString()}`);
     }
   };
