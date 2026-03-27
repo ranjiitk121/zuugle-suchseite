@@ -26,8 +26,6 @@
 | `bounds`                         | `/search`      | Will adjust the map to the provided bounds and only shows tours which start within those bounds. The bounds are updated when a user moves the map (dragging it or zooming in/out).                                                                                                                                                                                                                                                                     | `{"north":47.697747261516, "south":47.00367043276572, "west":13.278350830078125, "east":13.921051025390627}` |
 | `range`                          | `/search`      | This is usually triggered when users click on one of the range cards visible on the start page.                                                                                                                                                                                                                                                                                                                                                        | `Karwendel`, `Ötztaler Alpen`                                                                                |
 
-<!-- TODO: combine range and provider parameters with range setting in filter.  -->
-
 ## First time installation
 
 ### Install Volta
