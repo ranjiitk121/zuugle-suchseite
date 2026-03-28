@@ -58,14 +58,20 @@ export default function AutocompleteSearch({
   }, [debouncedTrigger]);
 
   const handleSelect = (search: SearchWithType) => {
-    if (search.type === "city") {
+    let cityUpdate = false;
+    // very special case: initial setting of city through search bar
+    if (search.type === "city" || (search.type === "term" && city === null)) {
       const matchedCity = allCities.find(
         (city) =>
           city.label.toLowerCase() === search.term?.toLowerCase() ||
           city.value.toLowerCase() === search.term?.toLowerCase(),
       );
       if (matchedCity) {
-        dispatch(cityUpdated(matchedCity));
+        cityUpdate = true;
+        if (isSearchPage) {
+          dispatch(cityUpdated(matchedCity));
+          dispatch(searchWithTypeUpdated(null));
+        }
       }
     }
     if (isSearchPage) {
@@ -82,6 +88,8 @@ export default function AutocompleteSearch({
       }
       if (search.type === "range") {
         searchParams.set("range", search.term);
+      } else if (cityUpdate) {
+        searchParams.set("city", search.term);
       } else {
         searchParams.set("search_type", search.type);
         searchParams.set("search", search.term);
@@ -154,12 +162,6 @@ export default function AutocompleteSearch({
               fontSize: "16px", // Optional: adjust font size
               opacity: "1",
             },
-          }}
-          onKeyDown={(ev) => {
-            if (ev.key === "Enter" && searchWithType) {
-              handleSelect(searchWithType);
-              ev.preventDefault();
-            }
           }}
           slotProps={{
             input: {
