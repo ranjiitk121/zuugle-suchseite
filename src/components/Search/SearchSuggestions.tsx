@@ -19,7 +19,7 @@ export interface SearchSuggestionsProps {
   };
 }
 
-const suggestionIconMap = {
+export const suggestionIconMap = {
   hut: CabinOutlined,
   peak: PeakIcon,
   range: LandscapeOutlined,

@@ -12,11 +12,11 @@ import { useSelector } from "react-redux";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
-import SearchSuggestions from "./SearchSuggestions";
+import SearchSuggestions, { suggestionIconMap } from "./SearchSuggestions";
 
 interface AutocompleteSearchProps {
   inputVariant?: "standard" | "outlined" | "filled";
-  handleSearch: (search: SearchWithType) => void;
+  handleSearch: (search: SearchWithType | null) => void;
   searchWithType: SearchWithType;
   setSearchWithType: (searchWithType: SearchWithType) => void;
 }
@@ -44,6 +44,11 @@ export default function AutocompleteSearch({
   const debouncedTrigger = useMemo(() => {
     return debounce(triggerGetSuggestions, 300);
   }, [triggerGetSuggestions]);
+
+  const Icon = useMemo(
+    () => suggestionIconMap[searchWithType.type] ?? SearchIcon,
+    [searchWithType.type],
+  );
 
   useEffect(() => {
     return () => debouncedTrigger.cancel();
@@ -89,7 +94,7 @@ export default function AutocompleteSearch({
       }}
       onChange={(event, newValue) => {
         if (!newValue) {
-          handleSearch({ term: "", type: "term" });
+          handleSearch(null);
           return;
         }
         if (typeof newValue === "string") {
@@ -110,7 +115,9 @@ export default function AutocompleteSearch({
             input: {
               ...params.InputProps,
               disableUnderline: true,
-              startAdornment: <SearchIcon sx={{ px: 1, color: "#666" }} />,
+              startAdornment: (
+                <Icon sx={{ px: 1, color: "#666", marginRight: 1 }} />
+              ),
               endAdornment: (
                 <Fragment>
                   {suggestionsFetching ? (

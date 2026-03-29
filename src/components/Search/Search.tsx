@@ -14,11 +14,13 @@ import { SearchWithType, useGetCitiesQuery } from "../../features/apiSlice";
 import { cityUpdated, searchWithTypeUpdated } from "../../features/searchSlice";
 import { filterUpdated } from "../../features/filterSlice";
 import { useAppDispatch } from "../../hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface SearchProps {
   setFilterOn?: (filterOn: boolean) => void;
 }
+
+export const emptySearch: SearchWithType = { term: "", type: "term" };
 
 export default function Search({ setFilterOn }: SearchProps) {
   const isXs = useMediaQuery(theme.breakpoints.down("sm"));
@@ -31,13 +33,22 @@ export default function Search({ setFilterOn }: SearchProps) {
   const currentSearch = useSelector(
     (state: RootState) => state.search.searchWithType,
   );
-  const [searchWithType, setSearchWithType] = useState<SearchWithType>(
-    currentSearch ?? { term: "", type: "term" },
-  );
   const dispatch = useAppDispatch();
 
-  const handleSearch = (search: SearchWithType) => {
+  const [draftSearch, setDraftSearch] = useState<SearchWithType>(
+    currentSearch ?? emptySearch,
+  );
+
+  useEffect(() => {
+    setDraftSearch(currentSearch ?? emptySearch);
+  }, [currentSearch]);
+
+  const handleSearch = (search: SearchWithType | null) => {
     let cityUpdate = false;
+    if (search === null || search === emptySearch) {
+      dispatch(searchWithTypeUpdated(null));
+      return;
+    }
     // very special case: initial setting of city through search bar
     if (search.type === "city" || (search.type === "term" && city === null)) {
       const matchedCity = allCities.find(
@@ -99,8 +110,8 @@ export default function Search({ setFilterOn }: SearchProps) {
         <AutocompleteSearch
           inputVariant={isXs ? "outlined" : "standard"}
           handleSearch={handleSearch}
-          searchWithType={searchWithType}
-          setSearchWithType={setSearchWithType}
+          searchWithType={draftSearch}
+          setSearchWithType={setDraftSearch}
         />
       </Box>
       <Box
@@ -114,7 +125,7 @@ export default function Search({ setFilterOn }: SearchProps) {
         }}
       >
         <Button
-          onClick={() => handleSearch(searchWithType)}
+          onClick={() => handleSearch(draftSearch)}
           aria-label={t("search.search")}
           startIcon={<SearchIcon />}
           sx={(muiTheme) => ({
