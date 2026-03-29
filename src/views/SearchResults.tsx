@@ -30,10 +30,10 @@ import {
   usePageHeader,
 } from "../utils/seoPageHelper";
 import { CustomIcon } from "../icons/CustomIcon";
-import { hasContent } from "../utils/globals";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
 import Filter from "../components/Filter/Filter";
+import AutocompleteCitySelection from "../components/Search/AutocompleteCitySelection";
 
 export default function SearchResults() {
   const { t } = useTranslation();
@@ -119,10 +119,6 @@ export default function SearchResults() {
 
   const [directLink, setDirectLink] = useState<DirectLink | null>(null);
 
-  const activeFilter = useSelector(
-    (state: RootState) => hasContent(filter) || state.search.geolocation,
-  );
-
   const { data: allCities = [] } = useGetCitiesQuery();
 
   useEffect(() => {
@@ -168,41 +164,33 @@ export default function SearchResults() {
     <Box className={"header-line-main"} sx={{ width: "100%" }}>
       <Box
         sx={{
-          paddingTop: showMap ? "12px" : "2px",
-          paddingBottom: "5.5px",
+          paddingTop: showMap ? "16px" : "12px",
+          paddingBottom: "16px",
+          paddingX: "15px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          gap: "24px",
         }}
       >
         {loadedTours?.total != undefined && (
           <>
             <Typography
-              color={"black"}
-              sx={{ textAlign: "center", paddingTop: "0px" }}
+              sx={{
+                fontWeight: 600,
+                fontSize: "16px",
+                color: "#333",
+                whiteSpace: "nowrap",
+              }}
             >
               {Number(loadedTours.total).toLocaleString()}
               {loadedTours.total === 1
                 ? ` ${t("main.ergebnis")}`
                 : ` ${t("main.ergebnisse")}`}
             </Typography>
-            {activeFilter && (
-              <Box display={"flex"} alignItems={"center"}>
-                &nbsp;{" - "}&nbsp;
-                <Typography
-                  sx={{
-                    fontSize: "16px",
-                    color: "#FF7663",
-                    fontWeight: "600",
-                    mr: "2px",
-                  }}
-                  className={"cursor-link"}
-                  onClick={() => setFilterOn(true)}
-                >
-                  {t("filter.filter")}
-                </Typography>
-              </Box>
-            )}
+            <Box sx={{ width: "100%", maxWidth: "300px" }}>
+              <AutocompleteCitySelection />
+            </Box>
           </>
         )}
       </Box>

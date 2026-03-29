@@ -39,6 +39,7 @@ export default function AutocompleteCitySelection({
       blurOnSelect
       clearOnBlur
       selectOnFocus
+      size="small"
       getOptionLabel={(option) =>
         t("search.ab_heimatbahnhof") + " " + option.label
       }
