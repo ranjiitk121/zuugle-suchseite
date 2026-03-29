@@ -46,7 +46,11 @@ export default function Search({ setFilterOn }: SearchProps) {
   const handleSearch = (search: SearchWithType | null) => {
     let cityUpdate = false;
     if (search === null || search === emptySearch) {
-      dispatch(searchWithTypeUpdated(null));
+      if (isSearchPage) {
+        dispatch(searchWithTypeUpdated(null));
+      } else {
+        navigate("/search");
+      }
       return;
     }
     // very special case: initial setting of city through search bar

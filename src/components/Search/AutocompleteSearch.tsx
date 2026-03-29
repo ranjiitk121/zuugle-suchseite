@@ -37,6 +37,9 @@ export default function AutocompleteSearch({
     },
   ] = useLazyGetSearchSuggestionsQuery();
 
+  const currentSearch = useSelector(
+    (state: RootState) => state.search.searchWithType,
+  );
   const city = useSelector((state: RootState) => state.search.city);
   const language = useSelector((state: RootState) => state.search.language);
   const suggestions =
@@ -87,7 +90,7 @@ export default function AutocompleteSearch({
         return option.term;
       }}
       options={suggestions}
-      value={searchWithType.term ? searchWithType : null}
+      value={currentSearch}
       inputValue={searchWithType.term}
       onInputChange={(event, newInputValue) => {
         handleSearchStringChange(newInputValue);

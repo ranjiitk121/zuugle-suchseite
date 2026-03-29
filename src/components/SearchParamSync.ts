@@ -133,7 +133,9 @@ export default function SearchParamSync({
     if (params.get("city")) updateReduxFromParam("city", citySlugUpdated);
     updateReduxFromParam("p", providerUpdated);
     updateReduxFromParam("lang", languageUpdated);
-    if (isSearchResultsPage) {
+    if (!isSearchResultsPage) {
+      dispatch(searchWithTypeUpdated(null));
+    } else {
       const searchPhrase = params.get("search");
       const rawSearchType = params.get("search_type");
       const searchWithType: SearchWithType | null = searchPhrase
