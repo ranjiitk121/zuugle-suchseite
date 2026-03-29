@@ -1,29 +1,32 @@
-import { useState, useMemo, useEffect, Fragment } from "react";
+import { useMemo, useEffect, Fragment } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
 import debounce from "lodash.debounce";
 import {
   SearchWithType,
-  useGetCitiesQuery,
   useLazyGetSearchSuggestionsQuery,
 } from "../../features/apiSlice";
 import { getTLD } from "../../utils/globals";
 import { RootState } from "../..";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../hooks";
-import { cityUpdated, searchWithTypeUpdated } from "../../features/searchSlice";
-import { useNavigate } from "react-router";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import SearchSuggestions from "./SearchSuggestions";
-import { filterUpdated } from "../../features/filterSlice";
+
+interface AutocompleteSearchProps {
+  inputVariant?: "standard" | "outlined" | "filled";
+  handleSearch: (search: SearchWithType) => void;
+  searchWithType: SearchWithType;
+  setSearchWithType: (searchWithType: SearchWithType) => void;
+}
 
 export default function AutocompleteSearch({
   inputVariant,
-}: {
-  inputVariant?: "standard" | "outlined" | "filled";
-}) {
+  handleSearch,
+  searchWithType,
+  setSearchWithType,
+}: AutocompleteSearchProps) {
   const { t } = useTranslation();
   const [
     triggerGetSuggestions,
@@ -33,22 +36,11 @@ export default function AutocompleteSearch({
       reset: resetSuggestions,
     },
   ] = useLazyGetSearchSuggestionsQuery();
-  const dispatch = useAppDispatch();
-  const currentSearch = useSelector(
-    (state: RootState) => state.search.searchWithType,
-  );
-  const filter = useSelector((state: RootState) => state.filter);
+
   const city = useSelector((state: RootState) => state.search.city);
   const language = useSelector((state: RootState) => state.search.language);
-  const provider = useSelector((state: RootState) => state.search.provider);
-  const [searchWithType, setSearchWithType] = useState<SearchWithType>(
-    currentSearch ?? { term: "", type: "term" },
-  );
-  const { data: allCities = [] } = useGetCitiesQuery();
-  const isSearchPage = window.location.pathname === "/search";
   const suggestions =
     searchWithType?.term.length < 3 ? [] : (suggestionsResults?.items ?? []);
-  const navigate = useNavigate();
   const debouncedTrigger = useMemo(() => {
     return debounce(triggerGetSuggestions, 300);
   }, [triggerGetSuggestions]);
@@ -57,53 +49,12 @@ export default function AutocompleteSearch({
     return () => debouncedTrigger.cancel();
   }, [debouncedTrigger]);
 
-  const handleSelect = (search: SearchWithType) => {
-    let cityUpdate = false;
-    // very special case: initial setting of city through search bar
-    if (search.type === "city" || (search.type === "term" && city === null)) {
-      const matchedCity = allCities.find(
-        (city) =>
-          city.label.toLowerCase() === search.term?.toLowerCase() ||
-          city.value.toLowerCase() === search.term?.toLowerCase(),
-      );
-      if (matchedCity) {
-        cityUpdate = true;
-        if (isSearchPage) {
-          dispatch(cityUpdated(matchedCity));
-          dispatch(searchWithTypeUpdated(null));
-        }
-      }
-    }
-    if (isSearchPage) {
-      if (search.type === "range") {
-        dispatch(filterUpdated({ ...filter, ranges: [search.term] }));
-        dispatch(searchWithTypeUpdated(null));
-      } else {
-        dispatch(searchWithTypeUpdated(search));
-      }
-    } else {
-      const searchParams = new URLSearchParams();
-      if (provider) {
-        searchParams.set("p", provider);
-      }
-      if (search.type === "range") {
-        searchParams.set("range", search.term);
-      } else if (cityUpdate) {
-        searchParams.set("city", search.term);
-      } else {
-        searchParams.set("search_type", search.type);
-        searchParams.set("search", search.term);
-      }
-      navigate(`/search?${searchParams.toString()}`);
-    }
-  };
-
   const handleSearchStringChange = (input: string) => {
     setSearchWithType({ term: input, type: "term" });
     resetSuggestions();
     if (input.length < 3) return;
     const tld = getTLD();
-    const _city = city?.value ?? "";
+    const _city = city?.value && city?.value !== "no-city" ? city.value : "";
 
     debouncedTrigger(
       {
@@ -124,7 +75,6 @@ export default function AutocompleteSearch({
       }}
       freeSolo
       blurOnSelect
-      clearOnBlur
       selectOnFocus
       filterOptions={(x) => x} // Disable built-in filtering, we handle filtering on the server
       getOptionLabel={(option) => {
@@ -132,21 +82,21 @@ export default function AutocompleteSearch({
         return option.term;
       }}
       options={suggestions}
-      value={currentSearch}
+      value={searchWithType.term ? searchWithType : null}
       inputValue={searchWithType.term}
       onInputChange={(event, newInputValue) => {
         handleSearchStringChange(newInputValue);
       }}
       onChange={(event, newValue) => {
         if (!newValue) {
-          handleSelect({ term: "", type: "term" });
+          handleSearch({ term: "", type: "term" });
           return;
         }
         if (typeof newValue === "string") {
-          handleSelect({ term: newValue, type: "term" });
+          handleSearch({ term: newValue, type: "term" });
           return;
         }
-        handleSelect(newValue);
+        handleSearch(newValue);
       }}
       renderOption={(props, option) => (
         <SearchSuggestions option={option} props={props} />
@@ -154,15 +104,8 @@ export default function AutocompleteSearch({
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder={t("start.suche")}
+          placeholder={t("start.suche") + "..."}
           variant={inputVariant}
-          sx={{
-            "& .MuiInputBase-input::placeholder": {
-              fontWeight: "bold", // Makes placeholder text bold
-              fontSize: "16px", // Optional: adjust font size
-              opacity: "1",
-            },
-          }}
           slotProps={{
             input: {
               ...params.InputProps,

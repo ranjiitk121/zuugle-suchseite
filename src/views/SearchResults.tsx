@@ -274,11 +274,7 @@ export default function SearchResults() {
             backgroundColor: "#f7f7f7",
           }}
         >
-          <Search
-            pageKey="search"
-            isSearchResultsPage={true}
-            setFilterOn={setFilterOn}
-          />
+          <Search setFilterOn={setFilterOn} />
         </Box>
       )}
       {showMap && (
