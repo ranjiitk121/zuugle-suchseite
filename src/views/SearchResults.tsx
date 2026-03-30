@@ -164,7 +164,7 @@ export default function SearchResults() {
     <Box className={"header-line-main"} sx={{ width: "100%" }}>
       <Box
         sx={{
-          paddingTop: showMap ? "16px" : "12px",
+          paddingTop: "12px",
           paddingBottom: "16px",
           paddingX: "15px",
           display: "flex",
@@ -201,14 +201,7 @@ export default function SearchResults() {
     <div>
       <SearchParamSync isSearchResultsPage={true} />
       <Filter showFilter={filterOn} setShowFilter={setFilterOn} />
-      <Box
-        className={"search-result-header-container"}
-        sx={{
-          pb: { xs: "150px", sm: "30px" },
-          zIndex: 10,
-          position: "relative",
-        }}
-      >
+      <Box className={"search-result-header-container"}>
         {!!directLink && (
           <Box className={"seo-bar"}>
             <Typography
@@ -222,19 +215,7 @@ export default function SearchResults() {
             </Typography>
           </Box>
         )}
-        <Box
-          component={"div"}
-          className="rowing"
-          sx={{
-            height: "100%",
-            boxSizing: "border-box",
-            py: "15px",
-            px: {
-              xs: "15px",
-              sm: "30px",
-            },
-          }}
-        >
+        <Box component={"div"} className="rowing">
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box sx={{ mr: "16px", cursor: "pointer" }}>
               <Link
@@ -255,11 +236,10 @@ export default function SearchResults() {
       {!!allCities && allCities.length > 0 && (
         <Box
           sx={{
-            mt: { xs: "-154px", sm: "-30px" },
+            mt: { xs: "-110px", sm: "-50px" },
             display: "flex",
             justifyContent: "center",
             position: "relative",
-            backgroundColor: "#f7f7f7",
           }}
         >
           <Search setFilterOn={setFilterOn} />

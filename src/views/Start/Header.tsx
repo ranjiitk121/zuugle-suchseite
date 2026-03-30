@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 import { useTranslation } from "react-i18next";
 import { getDomainText, getTLD } from "../../utils/globals";
 import BackgroundImageLoader from "./BackgroundImageLoader";
@@ -57,11 +57,9 @@ export default function Header({
           </Box>
         ) : (
           <>
-            <Box className="rowing blueDiv">
-              <Suspense fallback={null}>
-                <DomainMenu />
-                <LanguageMenu />
-              </Suspense>
+            <Box className="rowing">
+              <DomainMenu />
+              <LanguageMenu />
             </Box>
 
             <Box className="header-text">
@@ -82,13 +80,13 @@ export default function Header({
       </BackgroundImageLoader>
       <Box
         sx={{
-          mt: "-30px",
+          mt: { xs: "-110px", sm: "-50px" },
           display: "flex",
           justifyContent: "center",
           position: "relative",
         }}
       >
-        <Search pageKey="start" isSearchResultsPage={false} />
+        <Search />
       </Box>
     </>
   );

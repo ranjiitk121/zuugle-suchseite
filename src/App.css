@@ -148,11 +148,11 @@ body ::-webkit-scrollbar-thumb:hover {
 
 .header-line {
   background: #ffff;
-  /* background: linear-gradient(91.15deg, #4992FF -6.78%, #FF9466 108.06%); */
   z-index: 0;
 }
 
 .header-line-main {
+  min-height: 68px;
   background-color: #f7f7f7;
   z-index: 0;
   box-shadow: 0px 5px 27px 0px rgba(0, 0, 0, 0.16);
@@ -350,15 +350,28 @@ body ::-webkit-scrollbar-thumb:hover {
   }
 }
 
-@media only screen and (min-width: 910px) {
-  .search-result-header-container {
-    background-color: #4992ff;
-    z-index: 100;
-    box-shadow: 0px 5px 27px 0px rgba(0, 0, 0, 0.16);
-    -webkit-box-shadow: 0px 5px 27px 0px rgba(0, 0, 0, 0.16);
-    -moz-box-shadow: 0px 5px 27px 0px rgba(0, 0, 0, 0.16);
-  }
+.search-result-header-container {
+  background-color: #4992ff;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0px 5px 27px 0px rgba(0, 0, 0, 0.16);
+  -webkit-box-shadow: 0px 5px 27px 0px rgba(0, 0, 0, 0.16);
+  -moz-box-shadow: 0px 5px 27px 0px rgba(0, 0, 0, 0.16);
+}
 
+@media only screen and (min-width: 600px) {
+  .search-result-header-container {
+    padding-bottom: 50px;
+  }
+}
+
+@media only screen and (max-width: 599px) {
+  .search-result-header-container {
+    padding-bottom: 120px;
+  }
+}
+
+@media only screen and (min-width: 910px) {
   .seo-bar {
     height: 40px;
     padding-left: 60px;
@@ -372,16 +385,6 @@ body ::-webkit-scrollbar-thumb:hover {
 
 .map-container {
   margin-top: -38px;
-}
-
-@media only screen and (max-width: 909px) {
-  .search-result-header-container {
-    background-color: #4992ff;
-    z-index: 200;
-    box-shadow: 0px 5px 27px 0px rgba(0, 0, 0, 0.16);
-    -webkit-box-shadow: 0px 5px 27px 0px rgba(0, 0, 0, 0.16);
-    -moz-box-shadow: 0px 5px 27px 0px rgba(0, 0, 0, 0.16);
-  }
 }
 
 .tour-detail-header {
@@ -927,7 +930,6 @@ ul.about-bullets {
 .countrySwitch {
   padding: 13px;
   width: 173.02px;
-  /* height: 50px; */
   background: rgba(37, 73, 128, 0.2);
   border-radius: 20px;
   cursor: pointer;
@@ -938,6 +940,23 @@ ul.about-bullets {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  box-sizing: border-box;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+@media only screen and (min-width: 600px) {
+  .rowing {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+@media only screen and (max-width: 599px) {
+  .rowing {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 
 .languageIcon {
@@ -1070,31 +1089,12 @@ colLeft .domainItem {
 
 .colLeft {
   display: flex;
-  /* align-items: ; */
   flex-direction: column;
   justify-content: left;
 }
 
 .pointy {
   cursor: pointer;
-}
-
-.blueDiv {
-  padding: 15px 30px 40px 30px;
-}
-
-@media only screen and (max-width: 650px) {
-  .blueDiv {
-    padding: 20px 15px 45px 15px;
-  }
-
-  .languageMenu {
-    right: 10px;
-  }
-
-  .domainMenu {
-    left: 10px;
-  }
 }
 
 .filter-icon-container {

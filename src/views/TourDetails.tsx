@@ -499,27 +499,8 @@ export default function DetailReworked() {
         <LoadingSpinner />
       ) : (
         <>
-          <Box
-            className="search-result-header-container"
-            sx={{
-              pb: "30px",
-              zIndex: 10,
-              position: "relative",
-            }}
-          >
-            <Box
-              component={"div"}
-              className="rowing"
-              sx={{
-                height: "100%",
-                boxSizing: "border-box",
-                py: "15px",
-                px: {
-                  xs: "15px",
-                  sm: "30px",
-                },
-              }}
-            >
+          <Box className="search-result-header-container">
+            <Box component={"div"} className="rowing">
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box
                   sx={{ mr: "16px", cursor: "pointer" }}
@@ -534,32 +515,18 @@ export default function DetailReworked() {
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", gap: "16px" }}>
                 <LanguageMenu />
-                <Box
-                  sx={{ mr: "16px", cursor: "pointer", zIndex: "1301" }}
-                  onClick={handleCloseTab}
-                >
-                  <CustomIcon
-                    name="close"
-                    style={{
-                      stroke: "#fff",
-                      fill: "#fff",
-                      width: "24px",
-                      height: "24px",
-                    }}
-                  />
-                </Box>
               </Box>
             </Box>
           </Box>
           <Box
             sx={{
-              mt: "-30px",
+              mt: { xs: "-110px", sm: "-50px" },
               display: "flex",
               justifyContent: "center",
               position: "relative",
             }}
           >
-            <Search pageKey="detail" isSearchResultsPage={false} />
+            <Search />
           </Box>
           <Box>
             <Box className="tour-detail-header">
