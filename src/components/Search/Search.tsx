@@ -147,7 +147,7 @@ export default function Search({ setFilterOn }: SearchProps) {
             },
           })}
         >
-          {t("search.search")}
+          {isSearchPage ? t("search.search") : t("search.go")}
         </Button>
         {setFilterOn && <FilterButton setFilterOn={setFilterOn!} />}
       </Box>
