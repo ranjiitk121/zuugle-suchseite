@@ -189,6 +189,7 @@ export default function TourMapContainer({
     <Box
       style={{
         height: "600px",
+        maxHeight: "60vh",
         width: "100%",
         position: "relative",
         overflow: "hidden",

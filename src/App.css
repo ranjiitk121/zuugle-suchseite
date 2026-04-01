@@ -200,11 +200,6 @@ body ::-webkit-scrollbar-thumb:hover {
   margin-right: auto;
 }
 
-.map-container {
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .seo-bar {
   text-align: left;
   padding-left: 20px;
