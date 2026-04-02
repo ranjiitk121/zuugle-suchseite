@@ -1,10 +1,15 @@
 import Box from "@mui/material/Box";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import { SxProps, Theme } from "@mui/material/styles";
 
-export function HideMapIcon() {
+type HideMapIconProps = {
+  sx?: SxProps<Theme>;
+};
+
+export function HideMapIcon({ sx }: HideMapIconProps) {
   return (
-    <Box sx={{ position: "relative", display: "inline-flex" }}>
-      <MapOutlinedIcon />
+    <Box sx={{ position: "relative", display: "inline-flex", ...sx }}>
+      <MapOutlinedIcon sx={{ fontSize: "inherit" }} />
       <Box
         sx={{
           position: "absolute",

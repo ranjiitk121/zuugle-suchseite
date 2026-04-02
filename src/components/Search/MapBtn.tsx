@@ -1,4 +1,3 @@
-import Button from "@mui/material/Button";
 import { useSelector } from "react-redux";
 import { RootState } from "../..";
 import { useAppDispatch } from "../../hooks";
@@ -7,13 +6,20 @@ import { boundsUpdated, mapUpdated } from "../../features/searchSlice";
 import { HideMapIcon } from "../../icons/HideMapIcon";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import { t } from "i18next";
+import { OutlinedButton } from "../OutlinedButton";
 
 const MapBtn = () => {
   const showMap = useSelector((state: RootState) => state.search.map);
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
 
-  const icon = showMap ? <HideMapIcon /> : <MapOutlinedIcon />;
+  const iconSize = { fontSize: 22 };
+  const icon = showMap ? (
+    <HideMapIcon sx={iconSize} />
+  ) : (
+    <MapOutlinedIcon sx={iconSize} />
+  );
+
   const mapBtnText = isMobile
     ? icon
     : showMap
@@ -28,18 +34,15 @@ const MapBtn = () => {
   };
 
   return (
-    <Button
-      variant="contained"
+    <OutlinedButton
+      variant="outlined"
       onClick={handleClick}
-      color="primary"
       startIcon={isMobile ? undefined : icon} // show icon as main content on mobile
       sx={{
-        padding: "8px 20px",
         position: "fixed",
         bottom: "20px",
         left: "50%",
         transform: "translateX(-50%)",
-        borderRadius: "50px 50px",
         margin: "2 auto",
         "@media (min-width: 900px)": {
           bottom: "calc(50px - 3%)", // Move down on screens wider than 900px
@@ -47,7 +50,7 @@ const MapBtn = () => {
       }}
     >
       {mapBtnText}
-    </Button>
+    </OutlinedButton>
   );
 };
 export default MapBtn;
