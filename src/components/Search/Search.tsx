@@ -137,13 +137,18 @@ export default function Search({ setFilterOn }: SearchProps) {
             color: muiTheme.palette.common.white,
             minWidth: { xs: "49%", sm: 100 },
             height: 40,
-            paddingX: 2,
             fontWeight: 700,
             transition: "all 0.2s ease-in-out",
             boxShadow: `0 2px 8px ${alpha(muiTheme.palette.primary.main, 0.2)}`,
-            "&:hover": {
+            "@media (hover: hover) and (pointer: fine)": {
+              "&:hover": {
+                backgroundColor: muiTheme.palette.primary.dark,
+                boxShadow: `0 4px 12px ${alpha(muiTheme.palette.primary.main, 0.26)}`,
+              },
+            },
+            "&:active": {
               backgroundColor: muiTheme.palette.primary.dark,
-              boxShadow: `0 3px 12px ${alpha(muiTheme.palette.primary.main, 0.26)}`,
+              boxShadow: `0 4px 12px ${alpha(muiTheme.palette.primary.main, 0.26)}`,
             },
           })}
         >

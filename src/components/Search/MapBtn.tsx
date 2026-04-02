@@ -6,7 +6,7 @@ import { boundsUpdated, mapUpdated } from "../../features/searchSlice";
 import { HideMapIcon } from "../../icons/HideMapIcon";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import { t } from "i18next";
-import { OutlinedButton } from "../OutlinedButton";
+import Button from "@mui/material/Button";
 
 const MapBtn = () => {
   const showMap = useSelector((state: RootState) => state.search.map);
@@ -34,23 +34,23 @@ const MapBtn = () => {
   };
 
   return (
-    <OutlinedButton
-      variant="outlined"
+    <Button
+      variant="contained"
       onClick={handleClick}
+      color="primary"
       startIcon={isMobile ? undefined : icon} // show icon as main content on mobile
       sx={{
+        padding: "8px 20px",
         position: "fixed",
-        bottom: "20px",
         left: "50%",
         transform: "translateX(-50%)",
+        borderRadius: "50px 50px",
         margin: "2 auto",
-        "@media (min-width: 900px)": {
-          bottom: "calc(50px - 3%)", // Move down on screens wider than 900px
-        },
+        bottom: "calc(50px - 3%)",
       }}
     >
       {mapBtnText}
-    </OutlinedButton>
+    </Button>
   );
 };
 export default MapBtn;

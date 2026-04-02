@@ -4,7 +4,8 @@ import { RootState } from "../..";
 import { hasContent } from "../../utils/globals";
 import { useSelector } from "react-redux";
 import { theme } from "../../theme";
-import { OutlinedButton } from "../OutlinedButton";
+import { darken, lighten } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 
 interface FilterButtonProps {
   setFilterOn: (filterOn: boolean) => void;
@@ -22,17 +23,28 @@ export default function FilterButton({ setFilterOn }: FilterButtonProps) {
     : theme.palette.primary.main;
 
   return (
-    <OutlinedButton
+    <Button
       onClick={() => setFilterOn(true)}
       aria-label={t("filter.filter")}
       startIcon={<FilterAltOutlinedIcon />}
       variant="outlined"
-      buttonColor={buttonColor}
       sx={() => ({
         minWidth: { xs: "49%", sm: 100 },
+        backgroundColor: lighten(buttonColor, 0.9),
+        color: buttonColor,
+        height: 40,
+        fontWeight: 700,
+        transition: "all 0.2s ease-in-out",
+        boxShadow: `0 1px 4px ${lighten(buttonColor, 0.7)}`,
+        "&:hover": {
+          backgroundColor: lighten(buttonColor, 0.84),
+          borderColor: buttonColor,
+          boxShadow: `0 2px 8px ${lighten(buttonColor, 0.62)}`,
+          color: darken(buttonColor, 0.08),
+        },
       })}
     >
       {t("filter.filter")}
-    </OutlinedButton>
+    </Button>
   );
 }
