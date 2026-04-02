@@ -72,8 +72,21 @@ body ::-webkit-scrollbar-thumb:hover {
 .tour-card {
   text-align: left;
   height: 100%;
-  width: 100%;
-  max-width: 400px;
+  width: clamp(320px, 30vw, 400px);
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1199px) {
+  .tour-card {
+    width: clamp(320px, 45vw, 400px);
+  }
+}
+
+@media (max-width: 899px) {
+  .tour-card {
+    width: clamp(320px, 90vw, 400px);
+  }
 }
 
 .tour_card_Image {
@@ -232,10 +245,6 @@ body ::-webkit-scrollbar-thumb:hover {
     padding: 30px 20px !important;
   }
 
-  .start-body-container {
-    padding: 30px 20px;
-  }
-
   .start-body-container h4 {
     font-size: 18px;
   }
@@ -294,7 +303,7 @@ body ::-webkit-scrollbar-thumb:hover {
   }
 
   .cards-container {
-    padding: 20px;
+    padding: 10px;
   }
 
   .my-modal {

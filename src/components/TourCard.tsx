@@ -56,9 +56,6 @@ export default function TourCard({ tour, city, provider }: TourCardProps) {
       href={tourLink}
       style={{
         textDecoration: "none",
-        width: "100%",
-        justifyItems: "center",
-        display: "grid",
       }}
       target={city && city !== "no-city" ? "_blank" : ""} // Set target to _blank only when city is set
       rel={city && city !== "no-city" ? "noopener noreferrer" : undefined}

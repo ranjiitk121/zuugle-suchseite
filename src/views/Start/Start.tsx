@@ -124,6 +124,7 @@ export default function Start() {
                 </Paper>
                 <Box className={"start-body-container"}>
                   <Box
+                    className={"cards-container"}
                     sx={{
                       marginTop: "20px",
                       padding: isMobile ? "30px 20px" : "30px 10px",

@@ -142,12 +142,7 @@ export default function SearchResults() {
   }, [location, allCities]);
 
   const renderCardContainer = () => (
-    <Box
-      className="cards-container"
-      sx={{
-        padding: "25px",
-      }}
-    >
+    <Box className="cards-container">
       <TourCardContainer
         tours={tours}
         hasMore={hasMore}
