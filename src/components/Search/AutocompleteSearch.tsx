@@ -112,15 +112,15 @@ export default function AutocompleteSearch({
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder={t("start.suche") + "..."}
+          placeholder={t("start.placeholder_suche")}
           variant={inputVariant}
           slotProps={{
             input: {
               ...params.InputProps,
               disableUnderline: true,
-              startAdornment: (
+              startAdornment: currentSearch ? (
                 <Icon sx={{ px: 1, color: "#666", marginRight: 1 }} />
-              ),
+              ) : null,
               endAdornment: (
                 <Fragment>
                   {suggestionsFetching ? (

@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import { alpha } from "@mui/material/styles";
 import FilterButton from "./FilterButton";
 import AutocompleteSearch from "./AutocompleteSearch";
 import { useNavigate } from "react-router";
@@ -95,15 +96,22 @@ export default function Search({ setFilterOn }: SearchProps) {
         padding: { xs: "10px 12px 10px 6px", sm: "12px 24px 12px 12px" },
         border: "2px solid #ddd",
         boxShadow: "rgba(100, 100, 111, 0.3) 0px 3px 20px 0px",
+        transition: "border-color 0.2s ease",
         boxSizing: "border-box",
         width: { xs: "calc(100% - 24px)" },
         maxWidth: "650px",
         alignItems: "center",
         display: "flex",
         flexDirection: "row",
+        "&:focus-within": {
+          borderColor: "primary.light",
+          boxShadow: (theme) =>
+            `0 0 2px 3px ${alpha(theme.palette.primary.light, 0.2)},
+             0 3px 20px 0 rgba(100, 100, 111, 0.3)`,
+        },
       }}
     >
-      <Box sx={{ flexGrow: 1, width: "100%", marginRight: "15px" }}>
+      <Box sx={{ flexGrow: 1, width: "100%", marginX: "15px" }}>
         <AutocompleteSearch
           inputVariant={"standard"}
           handleSearch={handleSearch}
@@ -122,7 +130,7 @@ export default function Search({ setFilterOn }: SearchProps) {
         }}
       >
         <SearchButton handleSearch={() => handleSearch(draftSearch)} />
-        {setFilterOn && <FilterButton setFilterOn={setFilterOn!} />}
+        {setFilterOn && <FilterButton setFilterOn={setFilterOn} />}
       </Box>
     </Box>
   );
