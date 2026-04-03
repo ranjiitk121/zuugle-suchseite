@@ -165,7 +165,7 @@ body ::-webkit-scrollbar-thumb:hover {
 }
 
 .header-line-main {
-  min-height: 74px;
+  min-height: 70px;
   margin-top: -20px;
   background-color: #f7f7f7;
   z-index: 0;
@@ -201,10 +201,6 @@ body ::-webkit-scrollbar-thumb:hover {
 .filter-button-container,
 .order-container {
   min-width: 190px;
-}
-
-.result-text-mobile {
-  display: none;
 }
 
 .cards-container {
@@ -286,12 +282,6 @@ body ::-webkit-scrollbar-thumb:hover {
 
   .result-text {
     display: none;
-  }
-
-  .result-text-mobile {
-    display: block;
-    font-size: 16px !important;
-    font-weight: 600 !important;
   }
 
   .filter-button-container,
@@ -406,9 +396,7 @@ body ::-webkit-scrollbar-thumb:hover {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-
   margin-top: 2rem;
-
   font-weight: 600;
   font-size: 16px;
   line-height: 26px;

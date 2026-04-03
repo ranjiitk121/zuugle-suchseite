@@ -46,7 +46,7 @@ const MapBtn = () => {
         transform: "translateX(-50%)",
         borderRadius: "50px 50px",
         margin: "2 auto",
-        bottom: "calc(50px - 3%)",
+        bottom: "8px",
       }}
     >
       {mapBtnText}
