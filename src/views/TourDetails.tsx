@@ -141,6 +141,12 @@ export default function DetailReworked() {
     navigate(`/search` + (city ? `?city=${city.value}` : ""));
   };
 
+  useEffect(() => {
+    if (city?.value) {
+      navigate(`/tour/${idOne}/${city.value}`);
+    }
+  }, [city]);
+
   const LoadingSpinner = () => (
     <div
       style={{
