@@ -115,10 +115,6 @@ body ::-webkit-scrollbar-thumb:hover {
   justify-content: space-between;
 }
 
-.mt-3 {
-  margin-top: 16px;
-}
-
 .btn {
   text-transform: unset !important;
 }
@@ -374,21 +370,6 @@ body ::-webkit-scrollbar-thumb:hover {
 .tour-detail-header {
   padding: 2rem 1rem;
   text-align: left;
-}
-
-.tour-detail-tag {
-  padding: 2px 5px;
-  color: #c5c5c5;
-  background: rgba(16, 16, 16, 0.8);
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 18px;
-}
-
-.tour-detail-tag-gray {
-  color: #8b8b8b;
-  background: #dddddd;
 }
 
 .tour-detail-difficulties {

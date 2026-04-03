@@ -45,6 +45,7 @@ import { RootState } from "../";
 import { CustomIcon } from "../icons/CustomIcon";
 import LanguageMenu from "../components/LanguageMenu";
 import Divider from "@mui/material/Divider";
+import Chip from "@mui/material/Chip";
 
 export default function DetailReworked() {
   const [activeConnection, setActiveConnection] =
@@ -543,11 +544,35 @@ export default function DetailReworked() {
       ) : (
         <Box>
           <Box className="tour-detail-header">
-            <Box className="mt-2">
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                flexWrap: "wrap",
+                gap: 1,
+              }}
+            >
               <Typography variant="title">{tour?.title}</Typography>
-            </Box>
-            <Box className="mt-3">
-              <span className="tour-detail-tag">{tour?.range}</span>
+              {city?.label && (
+                <Box
+                  sx={{
+                    "& path": { fill: (theme) => theme.palette.primary.dark },
+                  }}
+                >
+                  <Typography variant="title" color="primary.dark">
+                    {t("search.ab_heimatbahnhof")} {city?.label}
+                  </Typography>
+                  <CustomIcon
+                    name="transportTrain"
+                    style={{
+                      stroke: "none",
+                      marginLeft: "8px",
+                      marginBottom: "-3px",
+                    }}
+                  />
+                </Box>
+              )}
             </Box>
           </Box>
           <Box sx={{ backgroundColor: "#fff" }}>
@@ -556,6 +581,18 @@ export default function DetailReworked() {
                 sx={{ width: "100%", position: "relative" }}
                 className="tour-detail-map-container"
               >
+                <Chip
+                  sx={{
+                    position: "absolute",
+                    top: 10,
+                    left: 10,
+                    bgcolor: "#000",
+                    color: "#C5C5C5",
+                    fontSize: 12,
+                    zIndex: 5,
+                  }}
+                  label={`${tour?.range}`}
+                />
                 <InteractiveMap
                   gpxPositions={track || []}
                   anreiseGpxPositions={toTourTrack || []}
