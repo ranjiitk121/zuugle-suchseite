@@ -156,7 +156,7 @@ export default function SearchResults() {
       <Box
         sx={{
           paddingTop: "25px",
-          paddingBottom: "8px",
+          paddingBottom: "6px",
           paddingX: "15px",
           display: "flex",
           alignItems: "center",
@@ -168,7 +168,6 @@ export default function SearchResults() {
           <>
             <Typography
               sx={{
-                fontWeight: 600,
                 fontSize: "16px",
                 color: "#333",
                 whiteSpace: "nowrap",
@@ -192,50 +191,63 @@ export default function SearchResults() {
     <div>
       <SearchParamSync isSearchResultsPage={true} />
       <Filter showFilter={filterOn} setShowFilter={setFilterOn} />
-      <Box className={"search-result-header-container"}>
-        {!!directLink && (
-          <Box className={"seo-bar"}>
-            <Typography
-              variant={"h1"}
-              sx={{ color: "#fff", fontSize: "18px", marginBottom: "5px" }}
-            >
-              {directLink.header}
-            </Typography>
-            <Typography variant={"h2"} sx={{ fontSize: "14px", color: "#fff" }}>
-              {directLink.description}
-            </Typography>
+      <Box
+        sx={{
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          backgroundColor: "#f7f7f7",
+        }}
+      >
+        <Box className={"search-result-header-container"}>
+          {!!directLink && (
+            <Box className={"seo-bar"}>
+              <Typography
+                variant={"h1"}
+                sx={{ color: "#fff", fontSize: "18px", marginBottom: "5px" }}
+              >
+                {directLink.header}
+              </Typography>
+              <Typography
+                variant={"h2"}
+                sx={{ fontSize: "14px", color: "#fff" }}
+              >
+                {directLink.description}
+              </Typography>
+            </Box>
+          )}
+          <Box component={"div"} className="rowing">
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box sx={{ mr: "16px", cursor: "pointer" }}>
+                <Link
+                  to={"/" + (provider ? `?p=${provider}` : "")}
+                  aria-label={t("start.zurueck")}
+                >
+                  <CustomIcon
+                    name="arrowBefore"
+                    style={{ stroke: "#fff", width: "34px", height: "34px" }}
+                  />
+                </Link>
+              </Box>
+              <DomainMenu />
+            </Box>
+            <LanguageMenu />
+          </Box>
+        </Box>
+        {!!allCities && allCities.length > 0 && (
+          <Box
+            sx={{
+              mt: "-50px",
+              display: "flex",
+              justifyContent: "center",
+              position: "relative",
+            }}
+          >
+            <Search setFilterOn={setFilterOn} />
           </Box>
         )}
-        <Box component={"div"} className="rowing">
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Box sx={{ mr: "16px", cursor: "pointer" }}>
-              <Link
-                to={"/" + (provider ? `?p=${provider}` : "")}
-                aria-label={t("start.zurueck")}
-              >
-                <CustomIcon
-                  name="arrowBefore"
-                  style={{ stroke: "#fff", width: "34px", height: "34px" }}
-                />
-              </Link>
-            </Box>
-            <DomainMenu />
-          </Box>
-          <LanguageMenu />
-        </Box>
+        {totalToursHeader()}
       </Box>
-      {!!allCities && allCities.length > 0 && (
-        <Box
-          sx={{
-            mt: "-50px",
-            display: "flex",
-            justifyContent: "center",
-            position: "relative",
-          }}
-        >
-          <Search setFilterOn={setFilterOn} />
-        </Box>
-      )}
       {showMap && (
         <Box className={"map-container"}>
           <Suspense
@@ -250,7 +262,6 @@ export default function SearchResults() {
           </Suspense>
         </Box>
       )}
-      {totalToursHeader()}
       {!!tours && tours.length > 0 && renderCardContainer()}
       <MapBtn />
     </div>
