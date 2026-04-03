@@ -80,7 +80,7 @@ export default function Header({
       </BackgroundImageLoader>
       <Box
         sx={{
-          mt: { xs: "-110px", sm: "-50px" },
+          mt: "-50px",
           display: "flex",
           justifyContent: "center",
           position: "relative",

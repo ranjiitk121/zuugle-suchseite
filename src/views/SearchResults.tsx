@@ -155,8 +155,8 @@ export default function SearchResults() {
     <Box className={"header-line-main"} sx={{ width: "100%" }}>
       <Box
         sx={{
-          paddingTop: "12px",
-          paddingBottom: "16px",
+          paddingTop: "25px",
+          paddingBottom: "8px",
           paddingX: "15px",
           display: "flex",
           alignItems: "center",
@@ -227,7 +227,7 @@ export default function SearchResults() {
       {!!allCities && allCities.length > 0 && (
         <Box
           sx={{
-            mt: { xs: "-110px", sm: "-50px" },
+            mt: "-50px",
             display: "flex",
             justifyContent: "center",
             position: "relative",

@@ -135,10 +135,7 @@ function DomainMenu() {
 
   return (
     <Box component={"div"} className="colLeft">
-      <div
-        className="countrySwitch rowing"
-        onClick={() => setShowDomainMenu(true)}
-      >
+      <div className="countrySwitch" onClick={() => setShowDomainMenu(true)}>
         <img
           src={`https://cdn.zuugle.at/img/zuugle_weiss.svg`}
           height={"19px"}

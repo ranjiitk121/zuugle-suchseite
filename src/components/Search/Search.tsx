@@ -1,20 +1,15 @@
 import Box from "@mui/material/Box";
 import FilterButton from "./FilterButton";
 import AutocompleteSearch from "./AutocompleteSearch";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { theme } from "../../theme";
-import Button from "@mui/material/Button";
-import { t } from "i18next";
-import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { RootState } from "../..";
-import { alpha } from "@mui/material/styles";
 import { SearchWithType, useGetCitiesQuery } from "../../features/apiSlice";
 import { cityUpdated, searchWithTypeUpdated } from "../../features/searchSlice";
 import { filterUpdated } from "../../features/filterSlice";
 import { useAppDispatch } from "../../hooks";
 import { useEffect, useState } from "react";
+import SearchButton from "./SearchButton";
 
 export interface SearchProps {
   setFilterOn?: (filterOn: boolean) => void;
@@ -23,7 +18,6 @@ export interface SearchProps {
 export const emptySearch: SearchWithType = { term: "", type: "term" };
 
 export default function Search({ setFilterOn }: SearchProps) {
-  const isXs = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
   const filter = useSelector((state: RootState) => state.filter);
   const provider = useSelector((state: RootState) => state.search.provider);
@@ -98,21 +92,20 @@ export default function Search({ setFilterOn }: SearchProps) {
         zIndex: 20,
         backgroundColor: "#FFF",
         borderRadius: "15px",
-        padding: { xs: "10px 12px", sm: "12px 24px" },
+        padding: { xs: "10px 12px 10px 6px", sm: "12px 24px 12px 12px" },
         border: "2px solid #ddd",
         boxShadow: "rgba(100, 100, 111, 0.3) 0px 3px 20px 0px",
         boxSizing: "border-box",
         width: { xs: "calc(100% - 24px)" },
         maxWidth: "650px",
+        alignItems: "center",
         display: "flex",
-        alignItems: { xs: "stretch", sm: "center" },
-        gap: { xs: 1, sm: 0 },
-        flexDirection: { xs: "column", sm: "row" },
+        flexDirection: "row",
       }}
     >
       <Box sx={{ flexGrow: 1, width: "100%", marginRight: "15px" }}>
         <AutocompleteSearch
-          inputVariant={isXs ? "outlined" : "standard"}
+          inputVariant={"standard"}
           handleSearch={handleSearch}
           searchWithType={draftSearch}
           setSearchWithType={setDraftSearch}
@@ -122,38 +115,13 @@ export default function Search({ setFilterOn }: SearchProps) {
         sx={{
           display: "flex",
           gap: 1,
-          width: { xs: "100%", sm: "auto" },
-          justifyContent: { xs: "center", sm: "flex-end" },
+          width: "auto",
+          justifyContent: "flex-end",
           alignItems: "center",
           flexShrink: 0,
         }}
       >
-        <Button
-          onClick={() => handleSearch(draftSearch)}
-          aria-label={t("search.search")}
-          startIcon={<SearchIcon />}
-          sx={(muiTheme) => ({
-            backgroundColor: muiTheme.palette.primary.main,
-            color: muiTheme.palette.common.white,
-            minWidth: { xs: "49%", sm: 100 },
-            height: 40,
-            fontWeight: 700,
-            transition: "all 0.2s ease-in-out",
-            boxShadow: `0 2px 8px ${alpha(muiTheme.palette.primary.main, 0.2)}`,
-            "@media (hover: hover) and (pointer: fine)": {
-              "&:hover": {
-                backgroundColor: muiTheme.palette.primary.dark,
-                boxShadow: `0 4px 12px ${alpha(muiTheme.palette.primary.main, 0.26)}`,
-              },
-            },
-            "&:active": {
-              backgroundColor: muiTheme.palette.primary.dark,
-              boxShadow: `0 4px 12px ${alpha(muiTheme.palette.primary.main, 0.26)}`,
-            },
-          })}
-        >
-          {isSearchPage ? t("search.search") : t("search.go")}
-        </Button>
+        <SearchButton handleSearch={() => handleSearch(draftSearch)} />
         {setFilterOn && <FilterButton setFilterOn={setFilterOn!} />}
       </Box>
     </Box>

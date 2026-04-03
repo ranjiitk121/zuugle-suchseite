@@ -520,7 +520,7 @@ export default function DetailReworked() {
           </Box>
           <Box
             sx={{
-              mt: { xs: "-110px", sm: "-50px" },
+              mt: "-50px",
               display: "flex",
               justifyContent: "center",
               position: "relative",
