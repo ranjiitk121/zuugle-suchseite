@@ -32,15 +32,16 @@ export default function FilterButton({ setFilterOn }: FilterButtonProps) {
       <IconButton
         onClick={() => setFilterOn(true)}
         aria-label={t("filter.filter")}
-        color="primary"
         sx={{
           backgroundColor: lighten(buttonColor, 0.9),
           color: buttonColor,
           height: 40,
           width: 40,
+          boxShadow: `0 1px 4px ${lighten(buttonColor, 0.7)}`,
           transition: "all 0.2s ease-in-out",
           "&:hover": {
             backgroundColor: lighten(buttonColor, 0.84),
+            color: darken(buttonColor, 0.08),
           },
         }}
       >

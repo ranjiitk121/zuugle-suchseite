@@ -20,7 +20,28 @@ export default function SearchButton({ handleSearch }: SearchButtonProps) {
       <IconButton
         onClick={handleSearch}
         aria-label={t("search.search")}
-        color="primary"
+        sx={(theme) => ({
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.common.white,
+          height: 40,
+          width: 40,
+          transition: "all 0.2s ease-in-out",
+          boxShadow: `0 1px 4px ${alpha(theme.palette.primary.main, 0.2)}`,
+          "&:focus, &:focus-visible, &.Mui-focusVisible": {
+            backgroundColor: theme.palette.primary.main,
+            boxShadow: `0 1px 4px ${alpha(theme.palette.primary.main, 0.2)}`,
+          },
+          "@media (hover: hover) and (pointer: fine)": {
+            "&:hover": {
+              backgroundColor: theme.palette.primary.dark,
+              boxShadow: `0 4px 12px ${alpha(theme.palette.primary.main, 0.26)}`,
+            },
+          },
+          "&:active": {
+            backgroundColor: theme.palette.primary.dark,
+            boxShadow: `0 4px 12px ${alpha(theme.palette.primary.main, 0.26)}`,
+          },
+        })}
       >
         <SearchIcon />
       </IconButton>
