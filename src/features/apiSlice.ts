@@ -157,7 +157,7 @@ export const api = createApi({
     }),
     getTotals: build.query<TotalResponse, string | undefined>({
       query: (city) => {
-        return `tours/total${city ? `?city=${city}` : ""}`;
+        return `tours/total${city && city !== "no-city" ? `?city=${city}` : ""}`;
       },
     }),
     getTour: build.query<Tour, TourParams>({

@@ -66,7 +66,8 @@ export default function SearchResults() {
     setPageTours(1);
     setHasMore(true);
     const params = {
-      city: search.citySlug || "",
+      city:
+        search.citySlug && search.citySlug !== "no-city" ? search.citySlug : "",
       filter: filter,
       search: search.searchWithType?.term || null,
       search_type: search.searchWithType?.type || null,
@@ -92,7 +93,10 @@ export default function SearchResults() {
   useEffect(() => {
     if (pageTours > 1) {
       const moreTours = triggerMoreTours({
-        city: search.citySlug || "",
+        city:
+          search.citySlug && search.citySlug !== "no-city"
+            ? search.citySlug
+            : "",
         filter: filter,
         search: search.searchWithType?.term || "",
         search_type: search.searchWithType?.type || "",

@@ -93,7 +93,6 @@ export default function AutocompleteCitySelection({
           slotProps={{
             input: {
               ...params.InputProps,
-              disableUnderline: true,
               startAdornment: (
                 <CustomIcon
                   name="transportTrain"

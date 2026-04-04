@@ -77,7 +77,7 @@ export default function Start() {
 
     triggerLoadTours({
       limit: 10,
-      city: citySlug ?? "",
+      city: citySlug && citySlug !== "no-city" ? citySlug : "",
       provider: provider || undefined,
       ranges: true,
       currLanguage: language || undefined,
