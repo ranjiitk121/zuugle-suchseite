@@ -70,7 +70,7 @@
     "region_filter_suggestion": "Set filter for this region",
     "region_filter_helper": "region filter",
     "term_filter_suggestion": "Search for this term",
-    "city_filter_suggestion": "Set main station",
+    "city_filter_suggestion": "Show tours reachable from this city",
     "geolocation_search": "Geolocation search",
     "geolocation_search_warning": "invalid coordinates",
     "countries": "Countries",

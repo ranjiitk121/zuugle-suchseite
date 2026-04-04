@@ -70,7 +70,7 @@
     "region_filter_suggestion": "Définir filtre pour cette région",
     "region_filter_helper": "filtre de région",
     "term_filter_suggestion": "Rechercher ce terme",
-    "city_filter_suggestion": "Définir la gare de départ",
+    "city_filter_suggestion": "Afficher les randonnées accessibles depuis cette ville",
     "geolocation_search": "Recherche par géolocalisation",
     "geolocation_search_warning": "Coordonnées non valides",
     "countries": "Pays",

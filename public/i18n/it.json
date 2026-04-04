@@ -70,7 +70,7 @@
     "region_filter_suggestion": "Imposta filtro per questa regione",
     "region_filter_helper": "filtro per la regione",
     "term_filter_suggestion": "Cerca questo termine",
-    "city_filter_suggestion": "Imposta la stazione di partenza",
+    "city_filter_suggestion": "Mostra itinerari raggiungibili da questa città",
     "geolocation_search": "Cerca per geolocalizzazione",
     "geolocation_search_warning": "coordinate non valide",
     "countries": "Paesi",

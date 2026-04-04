@@ -70,7 +70,7 @@
     "region_filter_suggestion": "Nastavi filter za to regijo",
     "region_filter_helper": "filter regije",
     "term_filter_suggestion": "Išči ta izraz",
-    "city_filter_suggestion": "Nastavi izhodiščno postajo",
+    "city_filter_suggestion": "Prikaži ture, dosegljive iz tega mesta",
     "geolocation_search": "Iskanje geolokacije",
     "geolocation_search_warning": "neveljavne koordinate",
     "countries": "Države",
