@@ -70,7 +70,7 @@
     "region_filter_suggestion": "Filter für diese Region setzen",
     "region_filter_helper": "Regionsfilter",
     "term_filter_suggestion": "Suche nach diesem Begriff",
-    "city_filter_suggestion": "Setze Heimatbahnhof",
+    "city_filter_suggestion": "Setze Verkehrsknoten",
     "geolocation_search": "Geolocation Suche",
     "geolocation_search_warning": "ungültige Koordinaten",
     "countries": "Länder",

@@ -3,7 +3,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import CabinOutlined from "@mui/icons-material/CabinOutlined";
-import FilterAltOutlined from "@mui/icons-material/FilterAltOutlined";
+import TuneOutlinedIcon from "@mui/icons-material/TuneOutlined";
 import PeakIcon from "./icons/PeakIcon";
 import LandscapeOutlined from "@mui/icons-material/LandscapeOutlined";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
@@ -35,6 +35,10 @@ const suggestionTitleMap = {
   city: "filter.city_filter_suggestion",
 };
 
+const suggestionHelperMap: Partial<Record<SearchWithType["type"], string>> = {
+  range: "filter.region_filter_helper",
+};
+
 export default function SearchSuggestions({
   option,
   props,
@@ -42,16 +46,18 @@ export default function SearchSuggestions({
   const { t } = useTranslation();
   const Icon = suggestionIconMap[option.type];
   const title = t(suggestionTitleMap[option.type]);
-  const secondaryText =
-    option.type === "range" ? (
-      <Box
-        component="span"
-        sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}
-      >
-        <FilterAltOutlined sx={{ fontSize: "0.9rem" }} />
-        {t("filter.region_filter_helper")}
-      </Box>
-    ) : undefined;
+  const helperKey = suggestionHelperMap[option.type];
+  const secondaryText = helperKey ? (
+    <Box
+      component="span"
+      sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}
+    >
+      {option.type === "range" && (
+        <TuneOutlinedIcon sx={{ fontSize: "0.9rem" }} />
+      )}
+      {t(helperKey)}
+    </Box>
+  ) : undefined;
 
   return (
     <ListItem
@@ -59,7 +65,7 @@ export default function SearchSuggestions({
       sx={{ display: "flex", alignItems: "center", gap: 1 }}
       title={title}
     >
-      <ListItemIcon>
+      <ListItemIcon sx={{ "& path": { fill: "#8b8b8b" } }}>
         <div
           style={{
             borderRadius: "10px",
