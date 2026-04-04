@@ -39,7 +39,7 @@ export default function Search({ setFilterOn }: SearchProps) {
   }, [currentSearch]);
 
   const handleSearch = (search: SearchWithType | null) => {
-    let cityUpdate = false;
+    let cityUpdate: string | null = null;
     if (search === null || search === emptySearch) {
       if (isSearchPage) {
         dispatch(searchWithTypeUpdated(null));
@@ -56,10 +56,12 @@ export default function Search({ setFilterOn }: SearchProps) {
           city.value.toLowerCase() === search.term?.toLowerCase(),
       );
       if (matchedCity) {
-        cityUpdate = true;
+        cityUpdate = matchedCity.value;
         if (isSearchPage) {
           dispatch(cityUpdated(matchedCity));
           dispatch(searchWithTypeUpdated(null));
+          setDraftSearch(emptySearch);
+          return;
         }
       }
     }
@@ -67,6 +69,7 @@ export default function Search({ setFilterOn }: SearchProps) {
       if (search.type === "range") {
         dispatch(filterUpdated({ ...filter, ranges: [search.term] }));
         dispatch(searchWithTypeUpdated(null));
+        setDraftSearch(emptySearch);
       } else {
         dispatch(searchWithTypeUpdated(search));
       }
@@ -78,7 +81,7 @@ export default function Search({ setFilterOn }: SearchProps) {
       if (search.type === "range") {
         searchParams.set("range", search.term);
       } else if (cityUpdate) {
-        searchParams.set("city", search.term);
+        searchParams.set("city", cityUpdate);
       } else {
         searchParams.set("search_type", search.type);
         searchParams.set("search", search.term);
