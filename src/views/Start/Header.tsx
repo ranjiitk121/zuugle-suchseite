@@ -3,34 +3,26 @@ import { useTranslation } from "react-i18next";
 import { getDomainText, getTLD } from "../../utils/globals";
 import BackgroundImageLoader from "./BackgroundImageLoader";
 import Search from "../../components/Search/Search";
-import { useSelector } from "react-redux";
-import { RootState } from "../..";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
+import { TotalResponse } from "../../features/apiSlice";
 
 const DomainMenu = lazy(() => import("../../components/DomainMenu"));
 const LanguageMenu = lazy(() => import("../../components/LanguageMenu"));
 
 export interface HeaderProps {
-  totalTours: number;
-  totalToursFromCity: number;
+  totals?: TotalResponse;
   isLoading?: boolean;
 }
-export default function Header({
-  totalTours,
-  totalToursFromCity,
-  isLoading,
-}: HeaderProps) {
+export default function Header({ totals, isLoading }: HeaderProps) {
   const { t } = useTranslation();
-  const city = useSelector((state: RootState) => state.search.city);
-
   const tld = getTLD();
 
   return (
     <>
       <BackgroundImageLoader sx={{ position: "relative" }} tld={tld}>
-        {totalTours === 0 ? (
+        {totals === undefined || totals.total_tours === 0 ? (
           <Box className="header-text">
             <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
               <img
@@ -64,15 +56,8 @@ export default function Header({
 
             <Box className="header-text">
               <Typography variant="h1" sx={{ height: "162px" }}>
-                {!city
-                  ? totalTours.toLocaleString()
-                  : totalToursFromCity.toLocaleString()}{" "}
-                {t(
-                  !city
-                    ? "start.tourenanzahl_untertitel"
-                    : "start.tourenanzahl_untertitel_city",
-                  { capCity: city?.label },
-                )}
+                {totals?.tours_country.toLocaleString()}{" "}
+                {t("start.tourenanzahl_untertitel")}
               </Typography>
             </Box>
           </>
