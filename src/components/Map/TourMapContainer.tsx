@@ -21,7 +21,11 @@ import { Tour } from "../../models/Tour";
 import { Marker } from "../../models/mapTypes";
 import { RootState } from "../..";
 import { useAppDispatch } from "../../hooks";
-import { boundsUpdated, geolocationUpdated } from "../../features/searchSlice";
+import {
+  boundsUpdated,
+  geolocationUpdated,
+  searchWithTypeUpdated,
+} from "../../features/searchSlice";
 import {
   PoiResult,
   useLazyGetGPXQuery,
@@ -109,6 +113,9 @@ export default function TourMapContainer({
     (state: RootState) => state.search.geolocation,
   );
   const city = useSelector((state: RootState) => state.search.city);
+  const searchWithType = useSelector(
+    (state: RootState) => state.search.searchWithType,
+  );
   const [markersInvalidated, setMarkersInvalidated] = useState(false);
   const [isUserMoving, setIsUserMoving] = useState(false);
   const dispatch = useAppDispatch();
@@ -215,6 +222,10 @@ export default function TourMapContainer({
       dispatch(
         geolocationUpdated({ lat: coords.lat, lng: coords.lng, radius }),
       );
+      // if search with type hut or peak is active, clear it
+      if (searchWithType?.type === "hut" || searchWithType?.type === "peak") {
+        dispatch(searchWithTypeUpdated(null));
+      }
       setMarkersInvalidated(true);
     },
     [dispatch],

@@ -6,7 +6,12 @@ import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { RootState } from "../..";
 import { SearchWithType, useGetCitiesQuery } from "../../features/apiSlice";
-import { cityUpdated, searchWithTypeUpdated } from "../../features/searchSlice";
+import {
+  boundsUpdated,
+  cityUpdated,
+  geolocationUpdated,
+  searchWithTypeUpdated,
+} from "../../features/searchSlice";
 import { filterUpdated } from "../../features/filterSlice";
 import { useAppDispatch } from "../../hooks";
 import { useEffect, useState } from "react";
@@ -72,6 +77,11 @@ export default function Search({ setFilterOn }: SearchProps) {
         setDraftSearch(emptySearch);
       } else {
         dispatch(searchWithTypeUpdated(search));
+        // if search-type is hut or peak, clear geolocation search if it's active
+        if (search.type === "hut" || search.type === "peak") {
+          dispatch(geolocationUpdated(null));
+          dispatch(boundsUpdated(null));
+        }
       }
     } else {
       const searchParams = new URLSearchParams();
