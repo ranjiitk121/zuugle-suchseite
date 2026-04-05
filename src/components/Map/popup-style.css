@@ -16,13 +16,17 @@
 }
 
 .request-popup .leaflet-popup-content-wrapper {
-  background: white; /* Remove background from wrapper */
+  background: transparent;
   box-shadow: none; /* Remove box shadow */
-  border-radius: 20px;
 }
 
 .request-popup .leaflet-popup-tip {
   display: none; /* Remove the popup tip */
+}
+
+.leaflet-container .request-popup a.leaflet-popup-close-button {
+  top: 5px !important;
+  right: 5px !important;
 }
 
 .circle-marker {

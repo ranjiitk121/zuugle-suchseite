@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { MapContainer, TileLayer, Polyline, ZoomControl } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Polyline,
+  ZoomControl,
+  Marker as LeafletMarker,
+  Tooltip,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import Box from "@mui/material/Box";
@@ -16,6 +23,7 @@ import { RootState } from "../..";
 import { useAppDispatch } from "../../hooks";
 import { boundsUpdated, geolocationUpdated } from "../../features/searchSlice";
 import {
+  PoiResult,
   useLazyGetGPXQuery,
   useLazyGetTourQuery,
 } from "../../features/apiSlice";
@@ -26,12 +34,52 @@ import { MapClickHandler } from "./MapClickHandler";
 import { MapBoundsUpdater } from "./MapBoundsUpdater";
 import { MapBoundsSync } from "./MapBoundsSync";
 import { useSearchParams } from "react-router";
+import { renderToStaticMarkup } from "react-dom/server";
+import { suggestionIconMap } from "../Search/SearchSuggestions";
+import { theme } from "../../theme";
 
 // Re-export Marker for backward compatibility
 export type { Marker };
 
+/**
+ * Creates a Leaflet divIcon for a POI based on its type.
+ * Renders the MUI icon as HTML and wraps it in a styled container.
+ */
+function createPoiIcon(type: PoiResult["type"]): L.DivIcon {
+  const pinColor = theme.palette.primary.dark;
+  const iconColor = "#ffff";
+  const IconComponent = suggestionIconMap[type] as
+    | React.ElementType
+    | undefined;
+  const iconHtml = IconComponent
+    ? renderToStaticMarkup(
+        <IconComponent
+          style={{ width: "20px", height: "20px", color: iconColor }}
+        />,
+      )
+    : `<span style="font-size: 15px; font-weight: 700; color: ${iconColor}; line-height: 1;">?</span>`;
+
+  return L.divIcon({
+    html: `
+      <div style="width: 38px; height: 48px; position: relative; display: flex; align-items: center; justify-content: center;">
+        <svg width="38" height="48" viewBox="0 0 38 48" xmlns="http://www.w3.org/2000/svg" style="position: absolute; inset: 0; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.22));">
+          <path d="M19 46C19 46 5 31 5 18.5C5 11.6 11.1 6 19 6C26.9 6 33 11.6 33 18.5C33 31 19 46 19 46Z" fill="${pinColor}" stroke="rgba(0,0,0,0.16)"/>
+        </svg>
+        <div style="position: absolute; top: 9px; left: 9px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;">
+          ${iconHtml}
+        </div>
+      </div>
+    `,
+    className: "",
+    iconSize: [38, 48],
+    iconAnchor: [19, 46],
+    popupAnchor: [0, -40],
+  });
+}
+
 export interface TourMapContainerProps {
   markers: Marker[];
+  pois: PoiResult[];
   isLoading: boolean;
 }
 
@@ -40,6 +88,7 @@ export interface TourMapContainerProps {
  */
 export default function TourMapContainer({
   markers,
+  pois,
   isLoading,
 }: TourMapContainerProps) {
   const [triggerTourDetails, { data: tourDetails }] = useLazyGetTourQuery();
@@ -160,7 +209,7 @@ export default function TourMapContainer({
     [markers, startMarker, handleMarkerClick],
   );
 
-  const handlePoiSearch = useCallback(
+  const handleGeolocationSearch = useCallback(
     (coords: L.LatLng, radius: number) => {
       setClickPosition(null);
       dispatch(
@@ -211,7 +260,7 @@ export default function TourMapContainer({
           maxNativeZoom={17}
           attribution='<a href="https://github.com/sletuffe/OpenTopoMap">&copy; OpenTopoMap-R</a> <a href="https://openmaps.fr/donate">❤️ Donation</a> <a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap</a>'
         />
-        {!geolocation && (
+        {!geolocation && pois.length === 0 && (
           <MapBoundsSync
             setIsUserMoving={setIsUserMoving}
             updateBounds={updateBounds}
@@ -221,12 +270,13 @@ export default function TourMapContainer({
           isUserMoving={isUserMoving}
           geolocation={geolocation}
           markers={markers}
+          pois={pois}
           markersInvalidated={markersInvalidated}
         />
         <MapClickHandler
           clickPosition={clickPosition}
           setClickPosition={setClickPosition}
-          handlePoiSearch={handlePoiSearch}
+          handlePoiSearch={handleGeolocationSearch}
         />
         <MemoizedPopupCard
           tour={selectedTour}
@@ -288,6 +338,20 @@ export default function TourMapContainer({
             removeOutsideVisibleBounds: true,
           }}
         />
+
+        {/* Render POI markers */}
+        {pois.map((poi) => (
+          <LeafletMarker
+            key={`poi-${poi.type}-${poi.lat}-${poi.lon}`}
+            position={L.latLng(poi.lat, poi.lon)}
+            icon={createPoiIcon(poi.type)}
+          >
+            <Tooltip direction="top" offset={[0, -36]}>
+              {poi.name}
+            </Tooltip>
+          </LeafletMarker>
+        ))}
+
         {geolocation && (
           <ResizableCircle
             center={geolocation}

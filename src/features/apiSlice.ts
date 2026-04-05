@@ -50,6 +50,7 @@ export interface ToursResponse {
   page: number;
   ranges: RangeObject[];
   markers: Marker[];
+  pois: PoiResult[];
 }
 
 export interface ToursParams {
@@ -82,6 +83,13 @@ export function isValidSearchType(type: string | null): type is SearchType {
   return (
     type === "city" || type === "hut" || type === "peak" || type === "range"
   );
+}
+
+export interface PoiResult {
+  lat: number;
+  lon: number;
+  name: string;
+  type: SearchType;
 }
 
 export interface SearchWithType {

@@ -225,6 +225,7 @@ export default function SearchResults() {
           >
             <TourMapContainer
               markers={loadedTours?.markers || []}
+              pois={loadedTours?.pois || []}
               isLoading={isToursLoading}
             />
           </Suspense>
