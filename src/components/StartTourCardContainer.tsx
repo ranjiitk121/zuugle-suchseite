@@ -8,15 +8,13 @@ import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 
+const gridItemStyles = {
+  justifyContent: "center",
+  display: "grid",
+};
+
 const renderImage = (imageSrc: string, key: Key) => (
-  <Box
-    key={key}
-    style={{
-      justifyItems: "center",
-      display: "grid",
-      width: "100%",
-    }}
-  >
+  <Box key={key} style={gridItemStyles}>
     <img
       src={imageSrc}
       alt="Advertisement"
@@ -92,19 +90,35 @@ export default function StartTourCardContainer({
       ) : (
         <Grid container spacing={2} direction="row" sx={{ p: 1 }}>
           {firstSet.map((tour, index) => (
-            <Grid display="flex" key={index} size={{ xs: 12, md: 6, lg: 4 }}>
+            <Grid
+              key={index}
+              size={{ xs: 12, md: 6, lg: 4 }}
+              sx={gridItemStyles}
+            >
               <TourCard tour={tour} city={city} provider={provider} />
             </Grid>
           ))}
-          <Grid display="flex" key={"image"} size={{ xs: 12, md: 6, lg: 4 }}>
+          <Grid
+            key={"image"}
+            size={{ xs: 12, md: 6, lg: 4 }}
+            sx={gridItemStyles}
+          >
             {renderImage("https://cdn.zuugle.at/img/zuugle-ad.gif", "image1")}
           </Grid>
           {secondSet.map((tour, index) => (
-            <Grid display="flex" key={index} size={{ xs: 12, md: 6, lg: 4 }}>
+            <Grid
+              key={index}
+              size={{ xs: 12, md: 6, lg: 4 }}
+              sx={gridItemStyles}
+            >
               <TourCard tour={tour} city={city} provider={provider} />
             </Grid>
           ))}
-          <Grid display="flex" key={"discover"} size={{ xs: 12, md: 6, lg: 4 }}>
+          <Grid
+            key={"discover"}
+            size={{ xs: 12, md: 6, lg: 4 }}
+            sx={gridItemStyles}
+          >
             {renderFourth(t)}
           </Grid>
         </Grid>

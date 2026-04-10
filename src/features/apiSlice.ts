@@ -50,6 +50,7 @@ export interface ToursResponse {
   page: number;
   ranges: RangeObject[];
   markers: Marker[];
+  pois: PoiResult[];
 }
 
 export interface ToursParams {
@@ -59,6 +60,7 @@ export interface ToursParams {
   provider?: string;
   filter?: FilterObject;
   search?: string;
+  search_type?: string;
   page?: number;
   bounds?: BoundsObject;
   map?: boolean;
@@ -75,6 +77,31 @@ export interface SearchParams {
   tld: string;
 }
 
+export type SearchType = "hut" | "peak" | "range" | "term" | "city";
+
+export function isValidSearchType(type: string | null): type is SearchType {
+  return (
+    type === "city" || type === "hut" || type === "peak" || type === "range"
+  );
+}
+
+export interface PoiResult {
+  lat: number;
+  lon: number;
+  name: string;
+  type: SearchType;
+}
+
+export interface SearchWithType {
+  term: string;
+  type: SearchType;
+}
+
+interface AutocompleteSuggestionsResponse {
+  success: boolean;
+  items: SearchWithType[];
+}
+
 export interface Suggestion {
   suggestion: string;
 }
@@ -85,6 +112,7 @@ export interface SuggestionsResponse {
 
 export interface FilterParams {
   search?: string;
+  search_type?: string;
   city?: string;
 }
 
@@ -137,7 +165,7 @@ export const api = createApi({
     }),
     getTotals: build.query<TotalResponse, string | undefined>({
       query: (city) => {
-        return `tours/total${city ? `?city=${city}` : ""}`;
+        return `tours/total${city && city !== "no-city" ? `?city=${city}` : ""}`;
       },
     }),
     getTour: build.query<Tour, TourParams>({
@@ -176,6 +204,17 @@ export const api = createApi({
           Object.entries(params).map(([key, value]) => [key, String(value)]),
         );
         return `searchPhrases?${searchParams}`;
+      },
+    }),
+    getSearchSuggestions: build.query<
+      AutocompleteSuggestionsResponse,
+      SearchParams
+    >({
+      query: (params) => {
+        const searchParams = new URLSearchParams(
+          Object.entries(params).map(([key, value]) => [key, String(value)]),
+        );
+        return `searchphrase?${searchParams}`;
       },
     }),
     getFilter: build.query<FilterWithProviders, FilterParams>({
@@ -251,6 +290,8 @@ export const {
   useLazyGetToursQuery,
   useGetSearchPhrasesQuery,
   useLazyGetSearchPhrasesQuery,
+  useGetSearchSuggestionsQuery,
+  useLazyGetSearchSuggestionsQuery,
   useGetFilterQuery,
   useLazyGetFilterQuery,
   useGetTourQuery,

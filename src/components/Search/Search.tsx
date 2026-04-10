@@ -1,284 +1,150 @@
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
+import { alpha } from "@mui/material/styles";
+import FilterButton from "./FilterButton";
+import AutocompleteSearch from "./AutocompleteSearch";
+import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
-import { Fragment, useState } from "react";
-import { hasContent } from "../../utils/globals";
-import { Link } from "react-router";
-import FullScreenCityInput from "./FullScreenCityInput";
-import { useTranslation } from "react-i18next";
-import IconButton from "@mui/material/IconButton";
-import AutosuggestSearch from "./AutosuggestSearch";
-import Filter from "../Filter/Filter";
-import { theme } from "../../theme";
-import { MobileModal } from "./MobileModal";
 import { RootState } from "../..";
-import { CustomIcon } from "../../icons/CustomIcon";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { SearchWithType, useGetCitiesQuery } from "../../features/apiSlice";
+import {
+  boundsUpdated,
+  cityUpdated,
+  geolocationUpdated,
+  searchWithTypeUpdated,
+} from "../../features/searchSlice";
+import { filterUpdated } from "../../features/filterSlice";
+import { useAppDispatch } from "../../hooks";
+import { useEffect, useState } from "react";
+import SearchButton from "./SearchButton";
 
 export interface SearchProps {
-  pageKey: string;
-  isMain: boolean;
   setFilterOn?: (filterOn: boolean) => void;
-  filterOn?: boolean;
 }
 
-export default function Search({
-  pageKey,
-  isMain,
-  setFilterOn,
-  filterOn,
-}: SearchProps) {
-  // Translation
-  const { t } = useTranslation();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+export const emptySearch: SearchWithType = { term: "", type: "term" };
 
-  const city = useSelector((state: RootState) => state.search.city);
-  const searchPhrase = useSelector(
-    (state: RootState) => state.search.searchPhrase,
-  );
+export default function Search({ setFilterOn }: SearchProps) {
+  const navigate = useNavigate();
+  const filter = useSelector((state: RootState) => state.filter);
   const provider = useSelector((state: RootState) => state.search.provider);
+  const city = useSelector((state: RootState) => state.search.city);
+  const { data: allCities = [] } = useGetCitiesQuery();
+  const isSearchPage = window.location.pathname === "/search";
+  const currentSearch = useSelector(
+    (state: RootState) => state.search.searchWithType,
+  );
+  const dispatch = useAppDispatch();
 
-  const [showMobileModal, setShowMobileModal] = useState(false);
-  const [showSearchModal, setShowSearchModal] = useState(false);
-  const [ShowCitySearch, setShowCitySearch] = useState(false);
-  if (filterOn === undefined || setFilterOn === undefined) {
-    [filterOn, setFilterOn] = useState(false);
-  }
-
-  const activeFilter = useSelector(
-    (state: RootState) => hasContent(state.filter) || state.search.geolocation,
+  const [draftSearch, setDraftSearch] = useState<SearchWithType>(
+    currentSearch ?? emptySearch,
   );
 
-  const handleOpenModal = (type: "search" | "city") => {
-    if (isMobile) {
-      setShowMobileModal(true);
-    } else if (type === "search") {
-      setShowSearchModal(true);
+  useEffect(() => {
+    setDraftSearch(currentSearch ?? emptySearch);
+  }, [currentSearch]);
+
+  const handleSearch = (search: SearchWithType | null) => {
+    let cityUpdate: string | null = null;
+    if (search === null || search === emptySearch) {
+      if (isSearchPage) {
+        dispatch(searchWithTypeUpdated(null));
+      } else {
+        navigate("/search");
+      }
+      return;
+    }
+    // very special case: initial setting of city through search bar
+    if (search.type === "city" || (search.type === "term" && city === null)) {
+      const matchedCity = allCities.find(
+        (city) =>
+          city.label.toLowerCase() === search.term?.toLowerCase() ||
+          city.value.toLowerCase() === search.term?.toLowerCase(),
+      );
+      if (matchedCity) {
+        cityUpdate = matchedCity.value;
+        if (isSearchPage) {
+          dispatch(cityUpdated(matchedCity));
+          dispatch(searchWithTypeUpdated(null));
+          setDraftSearch(emptySearch);
+          return;
+        }
+      }
+    }
+    if (isSearchPage) {
+      if (search.type === "range") {
+        dispatch(filterUpdated({ ...filter, ranges: [search.term] }));
+        dispatch(searchWithTypeUpdated(null));
+        setDraftSearch(emptySearch);
+      } else {
+        dispatch(searchWithTypeUpdated(search));
+        // if search-type is hut or peak, clear geolocation search if it's active
+        if (search.type === "hut" || search.type === "peak") {
+          dispatch(geolocationUpdated(null));
+          dispatch(boundsUpdated(null));
+        }
+      }
     } else {
-      setShowCitySearch(true);
+      const searchParams = new URLSearchParams();
+      if (provider) {
+        searchParams.set("p", provider);
+      }
+      if (search.type === "range") {
+        searchParams.set("range", search.term);
+      } else if (cityUpdate) {
+        searchParams.set("city", cityUpdate);
+      } else {
+        searchParams.set("search_type", search.type);
+        searchParams.set("search", search.term);
+      }
+      navigate(`/search?${searchParams.toString()}`);
     }
   };
 
   return (
-    <Fragment>
-      <MobileModal
-        showMobileModal={showMobileModal}
-        setShowMobileModal={setShowMobileModal}
-        setShowSearchModal={setShowSearchModal}
-        setShowCitySearch={setShowCitySearch}
-      />
-      <AutosuggestSearch
-        showSearchModal={showSearchModal}
-        setShowSearchModal={setShowSearchModal}
-      />
-      <FullScreenCityInput
-        showCitySearch={ShowCitySearch}
-        setShowCitySearch={setShowCitySearch}
-      />
-      {isMain && <Filter showFilter={filterOn} setShowFilter={setFilterOn} />}
+    <Box
+      sx={{
+        zIndex: 20,
+        backgroundColor: "#FFF",
+        borderRadius: "15px",
+        padding: { xs: "10px 12px 10px 6px", sm: "12px 24px 12px 12px" },
+        border: "2px solid #ddd",
+        boxShadow: "rgba(100, 100, 111, 0.3) 0px 3px 20px 0px",
+        transition: "border-color 0.2s ease",
+        boxSizing: "border-box",
+        width: { xs: "calc(100% - 24px)" },
+        maxWidth: "650px",
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "row",
+        "&:focus-within": {
+          borderColor: "primary.light",
+          boxShadow: (theme) =>
+            `0 0 2px 3px ${alpha(theme.palette.primary.light, 0.2)},
+             0 3px 20px 0 rgba(100, 100, 111, 0.3)`,
+        },
+      }}
+    >
+      <Box sx={{ flexGrow: 1, width: "100%", marginX: "15px" }}>
+        <AutocompleteSearch
+          inputVariant={"standard"}
+          handleSearch={handleSearch}
+          searchWithType={draftSearch}
+          setSearchWithType={setDraftSearch}
+        />
+      </Box>
       <Box
-        className="main-search-bar"
         sx={{
-          width: "100%",
           display: "flex",
-          justifyContent: "space-between",
+          gap: 1,
+          width: "auto",
+          justifyContent: "flex-end",
           alignItems: "center",
+          flexShrink: 0,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <CustomIcon
-            name="searchIcon"
-            style={{ strokeWidth: 1, stroke: "#8b8b8b", fill: "#101010" }}
-          />
-          <Box
-            sx={{
-              width: {
-                xs: "200px",
-                md: "486px",
-              },
-            }}
-          >
-            <Grid container>
-              <Grid
-                sx={{
-                  paddingRight: "16px",
-                  padding: 0,
-                  cursor: "pointer",
-                }}
-                role="button"
-                tabIndex={0}
-                aria-label={t("start.suche")}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    handleOpenModal("search");
-                  }
-                }}
-                onClick={() => handleOpenModal("search")}
-                size={{
-                  xs: 12,
-                  md: 6,
-                }}
-              >
-                <Box
-                  sx={{
-                    paddingLeft: "14px",
-                    justifyContent: "flex-start",
-                    display: "flex",
-                  }}
-                >
-                  <span className="search-bar--searchPhase">
-                    {searchPhrase && searchPhrase.length > 0
-                      ? searchPhrase
-                      : t("start.suche")}
-                  </span>
-                </Box>
-              </Grid>
-              {/* city -----   modal ----  below */}
-              <Grid
-                onClick={() => handleOpenModal("city")}
-                role="button"
-                tabIndex={0}
-                aria-label={
-                  city?.label
-                    ? `${t("search.ab_heimatbahnhof")} ${city?.label}`
-                    : t("start.heimatbahnhof")
-                }
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    handleOpenModal("city");
-                  }
-                }}
-                sx={{ cursor: "pointer" }}
-                display="flex"
-                alignItems="center"
-                size={{
-                  sm: 12,
-                  md: !city && pageKey === "detail" ? 12 : 6,
-                }}
-              >
-                <Box
-                  sx={{
-                    borderLeft: {
-                      sm: 0,
-                      md:
-                        !city && pageKey === "detail" ? 0 : "2px solid #DDDDDD",
-                    },
-                    paddingLeft: "14px",
-                  }}
-                >
-                  {pageKey !== "detail" ? (
-                    <Box
-                      className="search-bar--city"
-                      sx={{
-                        display: "flex",
-                        textAlign: "left",
-                        alignItems: "center",
-                      }}
-                    >
-                      <>
-                        {!isMobile && (
-                          <CustomIcon
-                            name="transportTrain"
-                            style={{
-                              strokeWidth: "1px",
-                              fill: "#000",
-                              stroke: "none",
-                              marginRight: "5px",
-                            }}
-                          />
-                        )}
-                        {city?.label
-                          ? `${t("search.ab_heimatbahnhof")} ${city?.label}`
-                          : t("start.heimatbahnhof")}
-                      </>
-                    </Box>
-                  ) : !city && pageKey === "detail" ? (
-                    <Box
-                      className="search-bar--city"
-                      sx={{
-                        cursor: "pointer",
-                        color: "#4992FF !important",
-                        fontFamily: `"Open Sans", "Helvetica", "Arial", sans-serif`,
-                        fontSize: { xs: "14px", sm: "15px" },
-                        fontWeight: "700",
-                        lineHeight: "20px",
-                        textAlign: "left",
-                      }}
-                    >
-                      {t("search.waehle_dein_heimatbahnhof")}
-                    </Box>
-                  ) : (
-                    <Box className="search-bar--city">{city?.label}</Box>
-                  )}
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-
-        <Box>
-          {/* ***** filter box in the Main page ******* */}
-          {!city && pageKey === "detail" ? (
-            ""
-          ) : (
-            <Box
-              sx={{
-                marginLeft: "10px",
-                backgroundColor: activeFilter ? "#FF7663" : undefined,
-                borderColor: activeFilter ? "#FF7663" : undefined,
-              }}
-              className="filter-icon-container"
-            >
-              {isMain ? (
-                <IconButton
-                  onClick={() => setFilterOn(true)}
-                  aria-label="Filter"
-                >
-                  <CustomIcon
-                    name="filterIcon"
-                    style={{
-                      transition: "stroke 0.3s",
-                      strokeWidth: 1.25,
-                      stroke: activeFilter ? "#fff" : "#101010",
-                      transform: "scale(0.675)",
-                    }}
-                  />
-                </IconButton>
-              ) : (
-                <Link
-                  to={{
-                    pathname: "/search",
-                    search:
-                      "?" +
-                      (searchPhrase ? `&search=${searchPhrase}` : "") +
-                      (provider ? `&p=${provider}` : ""),
-                  }}
-                >
-                  <IconButton
-                    aria-label="Go"
-                    sx={{
-                      "&:hover": {
-                        background: "#7aa8ff",
-                        fill: "#7aa8ff",
-                      },
-                    }}
-                  >
-                    <CustomIcon
-                      name="goIcon"
-                      style={{
-                        transform: "scale(1.55)",
-                        strokeWidth: 0,
-                      }}
-                    />
-                  </IconButton>
-                </Link>
-              )}
-            </Box>
-          )}
-        </Box>
+        <SearchButton handleSearch={() => handleSearch(draftSearch)} />
+        {setFilterOn && <FilterButton setFilterOn={setFilterOn} />}
       </Box>
-    </Fragment>
+    </Box>
   );
 }

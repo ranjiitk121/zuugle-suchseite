@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
 import { useIsMobile } from "../../utils/muiUtils";
 import {
   usePageHeader,
@@ -24,8 +23,8 @@ import Typography from "@mui/material/Typography";
 
 // Dynamische Imports für nicht-kritische Komponenten
 import KPIContainer from "../../components/KPIContainer";
-import MapBtn from "../../components/Search/MapBtn";
 import Footer from "../../components/Footer/Footer";
+import TotalToursHeader from "../../components/TotalToursHeader";
 
 export default function Start() {
   const { t } = useTranslation();
@@ -78,7 +77,7 @@ export default function Start() {
 
     triggerLoadTours({
       limit: 10,
-      city: citySlug ?? "",
+      city: citySlug && citySlug !== "no-city" ? citySlug : "",
       provider: provider || undefined,
       ranges: true,
       currLanguage: language || undefined,
@@ -103,14 +102,11 @@ export default function Start() {
 
   return (
     <>
-      <SearchParamSync isMain={false} />
+      <SearchParamSync isSearchResultsPage={false} />
       <Box style={{ background: "#fff" }}>
-        <Header
-          totalTours={totals?.tours_country || 0}
-          totalToursFromCity={totals?.tours_city || 0}
-          isLoading={isTotalsLoading}
-        />
+        <Header totals={totals} isLoading={isTotalsLoading} />
       </Box>
+      <TotalToursHeader loadedTours={loadedTours} />
 
       {!isTotalsLoading && (
         <>
@@ -118,21 +114,15 @@ export default function Start() {
             <>
               <Box style={{ background: "#fff" }}>
                 <Paper elevation={0} className={"header-line"}>
-                  <Box
-                    sx={{
-                      paddingTop: "55px",
-                      paddingBottom: "20px",
-                    }}
-                  >
-                    <Typography color={"#FFFFFF"} sx={{ textAlign: "center" }}>
-                      {t("start.zuugle_sucht_fuer_dich_1")}{" "}
-                      {totals?.total_provider}{" "}
-                      {t("start.zuugle_sucht_fuer_dich_2")}
-                    </Typography>
-                  </Box>
+                  <Typography color={"#FFFFFF"} sx={{ textAlign: "center" }}>
+                    {t("start.zuugle_sucht_fuer_dich_1")}{" "}
+                    {totals?.total_provider}{" "}
+                    {t("start.zuugle_sucht_fuer_dich_2")}
+                  </Typography>
                 </Paper>
                 <Box className={"start-body-container"}>
                   <Box
+                    className={"cards-container"}
                     sx={{
                       marginTop: "20px",
                       padding: isMobile ? "30px 20px" : "30px 10px",
@@ -182,11 +172,6 @@ export default function Start() {
                   </Box>
                 </Box>
               </Box>
-              <Link
-                to={`/search/?map=true` + (provider ? `&p=${provider}` : "")}
-              >
-                <MapBtn />
-              </Link>
             </>
           )}
           <Footer />

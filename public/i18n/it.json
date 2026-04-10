@@ -65,6 +65,12 @@
     "hard": "Difficile",
     "unknown": "Sconosciuto",
     "provider": "Portale",
+    "hut_filter_suggestion": "Trova itinerari con questo rifugio",
+    "peak_filter_suggestion": "Trova itinerari con questa cima",
+    "region_filter_suggestion": "Imposta filtro per questa regione",
+    "region_filter_helper": "filtro per la regione",
+    "term_filter_suggestion": "Cerca questo termine",
+    "city_filter_suggestion": "Mostra itinerari raggiungibili da questa città",
     "geolocation_search": "Cerca per geolocalizzazione",
     "geolocation_search_warning": "coordinate non valide",
     "countries": "Paesi",
@@ -260,6 +266,7 @@
     "bitte_stadt_waehlen": "Selezionate una città (città di residenza o vicina al vostro luogo di residenza) in modo da potervi mostrare gli orari."
   },
   "search": {
+    "go": "Vai!",
     "search": "Cerca",
     "abbrechen": "Annullare",
     "dein_heimatbahnhof": "La tua stazione ferroviaria",
@@ -270,6 +277,6 @@
     "oeffi_touren_alpenraum": "Itinerari raggiungibili con i mezzi pubblici nelle Alpi",
     "keine_vorschlaege": "Nessun suggerimento"
   },
-  "start_pages": { "zur_kartenansicht": "Vai alla mappa" },
-  "main_only": { "kartenansicht_entfernen": "Vai alla lista" }
+  "start_pages": { "zur_kartenansicht": "Mostra mappa" },
+  "main_only": { "kartenansicht_entfernen": "Chiudi mappa" }
 }

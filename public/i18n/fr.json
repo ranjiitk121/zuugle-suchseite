@@ -65,6 +65,12 @@
     "hard": "Difficile",
     "unknown": "Inconnu",
     "provider": "Portail",
+    "hut_filter_suggestion": "Trouver des randonnées avec ce refuge",
+    "peak_filter_suggestion": "Trouver des randonnées avec ce sommet",
+    "region_filter_suggestion": "Définir filtre pour cette région",
+    "region_filter_helper": "filtre de région",
+    "term_filter_suggestion": "Rechercher ce terme",
+    "city_filter_suggestion": "Afficher les randonnées accessibles depuis cette ville",
     "geolocation_search": "Recherche par géolocalisation",
     "geolocation_search_warning": "Coordonnées non valides",
     "countries": "Pays",
@@ -261,6 +267,7 @@
     "bitte_stadt_waehlen": "Veuillez sélectionner une ville (domicile ou proche de votre domicile) pour que nous puissions afficher vos horaires."
   },
   "search": {
+    "go": "Allez!",
     "search": "Rechercher",
     "abbrechen": "Annuler",
     "dein_heimatbahnhof": "Votre gare de départ",
@@ -271,6 +278,6 @@
     "oeffi_touren_alpenraum": "Sorties sans voiture dans les Alpes",
     "keine_vorschlaege": "Aucune suggestion"
   },
-  "start_pages": { "zur_kartenansicht": "Voir la carte" },
-  "main_only": { "kartenansicht_entfernen": "Voir la liste" }
+  "start_pages": { "zur_kartenansicht": "Afficher la carte" },
+  "main_only": { "kartenansicht_entfernen": "Fermer la carte" }
 }

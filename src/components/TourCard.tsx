@@ -56,9 +56,6 @@ export default function TourCard({ tour, city, provider }: TourCardProps) {
       href={tourLink}
       style={{
         textDecoration: "none",
-        width: "100%",
-        justifyItems: "center",
-        display: "grid",
       }}
       target={city && city !== "no-city" ? "_blank" : ""} // Set target to _blank only when city is set
       rel={city && city !== "no-city" ? "noopener noreferrer" : undefined}
@@ -87,10 +84,17 @@ export default function TourCard({ tour, city, provider }: TourCardProps) {
           />
         </Box>
         <CardContent
-          sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            flexGrow: 1,
+            "&:last-child": {
+              paddingBottom: { xs: "16px", sm: "24px" },
+            },
+          }}
         >
-          <div
-            style={{
+          <Box
+            sx={{
               display: "flex",
               gap: "10px",
               paddingBottom: "5px",
@@ -107,13 +111,14 @@ export default function TourCard({ tour, city, provider }: TourCardProps) {
               }}
             />
             <Typography variant="grayP">{tour.provider_name}</Typography>
-          </div>
+          </Box>
           <Typography
             variant="inherit"
             sx={{
               my: 2,
               fontWeight: "bold",
-              lineHeight: "24px",
+              lineHeight: { xs: "20px", sm: "24px" },
+              marginY: { xs: "7px", sm: "15px" },
             }}
           >
             {tour.title}

@@ -65,6 +65,12 @@
     "hard": "Težavno",
     "unknown": "Neznano",
     "provider": "Portal",
+    "hut_filter_suggestion": "Poišči ture s to kočo",
+    "peak_filter_suggestion": "Poišči ture s tem vrhom",
+    "region_filter_suggestion": "Nastavi filter za to regijo",
+    "region_filter_helper": "filter regije",
+    "term_filter_suggestion": "Išči ta izraz",
+    "city_filter_suggestion": "Prikaži ture, dosegljive iz tega mesta",
     "geolocation_search": "Iskanje geolokacije",
     "geolocation_search_warning": "neveljavne koordinate",
     "countries": "Države",
@@ -261,6 +267,7 @@
     "bitte_stadt_waehlen": "Izberite mesto (mesto stalnega ali bližnjega prebivališča), da vam lahko prikažemo vozni red."
   },
   "search": {
+    "go": "Naprej!",
     "search": "Iskanje",
     "abbrechen": "Prekini",
     "dein_heimatbahnhof": "Tvoja izhodiščna železniška postaja.",
@@ -271,6 +278,6 @@
     "oeffi_touren_alpenraum": "z javnim prevozom dostopne ture v alpskem prostoru",
     "keine_vorschlaege": "Ni predlogov"
   },
-  "start_pages": { "zur_kartenansicht": "Pojdi na zemljevid" },
-  "main_only": { "kartenansicht_entfernen": "Prehod na prikaz seznama" }
+  "start_pages": { "zur_kartenansicht": "Pokaži zemljevid" },
+  "main_only": { "kartenansicht_entfernen": "Zapri zemljevid" }
 }

@@ -1,5 +1,17 @@
 import { Tour } from "../models/Tour";
 import { i18n } from "i18next";
+import { Dayjs } from "dayjs";
+
+/**
+ * Rewrites the domain in a bahn-zum-berg URL to match the current Zuugle TLD.
+ * zuugle.it → bahn-zum-berg.it, zuugle.ch → .ch, zuugle.de → .de,
+ * all others → bahn-zum-berg.at
+ */
+function rewriteBahnZumBergDomain(url: string): string {
+  const tld = getTLD(); // "it" | "ch" | "de" | "at" | ...
+  const targetTld = ["it", "ch", "de"].includes(tld) ? tld : "at";
+  return url.replace(/bahn-zum-berg\.\w+/i, `bahn-zum-berg.${targetTld}`);
+}
 
 export function getTourLink(
   tour: Tour,
@@ -8,13 +20,13 @@ export function getTourLink(
 ) {
   if (city && city !== "no-city") {
     if (provider === "bahnzumberg") {
-      return `${tour.url}ab-${city}/`;
+      return `${rewriteBahnZumBergDomain(tour.url)}ab-${city}/`;
     } else {
       return `/tour/${tour.id}/${city}`;
     }
   } else {
     if (provider === "bahnzumberg") {
-      return `${tour.url}`;
+      return `${rewriteBahnZumBergDomain(tour.url)}`;
     } else {
       return `/tour/${tour.id}/no-city`;
     }
@@ -190,4 +202,10 @@ export const areSetsEqual = (set1: Set<any>, set2: Set<any>): boolean =>
 
 export function hasContent(obj: unknown): boolean {
   return obj != null && Object.keys(obj).length > 0;
+}
+
+export function getDurationAsHours(dayJsObject: Dayjs | null) {
+  if (dayJsObject) {
+    return dayJsObject.hour() + dayJsObject.minute() / 60;
+  }
 }

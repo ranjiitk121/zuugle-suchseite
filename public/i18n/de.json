@@ -65,6 +65,12 @@
     "hard": "Schwer",
     "unknown": "Unbekannt",
     "provider": "Tourenportal",
+    "hut_filter_suggestion": "Finde Touren mit dieser Hütte",
+    "peak_filter_suggestion": "Finde Touren mit diesem Gipfel",
+    "region_filter_suggestion": "Filter für diese Region setzen",
+    "region_filter_helper": "Regionsfilter",
+    "term_filter_suggestion": "Suche nach diesem Begriff",
+    "city_filter_suggestion": "Zeige Touren erreichbar von dieser Stadt",
     "geolocation_search": "Geolocation Suche",
     "geolocation_search_warning": "ungültige Koordinaten",
     "countries": "Länder",
@@ -261,16 +267,18 @@
     "bitte_stadt_waehlen": "Bitte wähle eine Stadt (Wohnort oder nahe deinem Wohnort) aus, damit wir dir deine Fahrpläne anzeigen können."
   },
   "search": {
+    "go": "Los!",
     "search": "Suche",
     "abbrechen": "Abbrechen",
     "dein_heimatbahnhof": "Dein Verkehrsknoten",
-    "ab_heimatbahnhof": "ab",
+    "ab_heimatbahnhof": "von",
     "keine_ergebnisse": "Keine Ergebnisse gefunden",
     "waehle_dein_heimatbahnhof": "Bitte wähle deinen Verkehrsknoten",
     "um_reise_berechnen_zu_koenen": "Um die Reise berechnen zu können",
     "oeffi_touren_alpenraum": "Öffi-Touren im Alpenraum",
-    "keine_vorschlaege": "Keine Vorschläge"
+    "keine_vorschlaege": "Keine Vorschläge",
+    "filter_ranges": ""
   },
-  "start_pages": { "zur_kartenansicht": "Zur Kartenansicht" },
-  "main_only": { "kartenansicht_entfernen": "Zur Listenansicht" }
+  "start_pages": { "zur_kartenansicht": "Karte anzeigen" },
+  "main_only": { "kartenansicht_entfernen": "Karte schließen" }
 }

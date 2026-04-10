@@ -1,61 +1,55 @@
-import Button from "@mui/material/Button";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { RootState } from "../..";
-import { CustomIcon } from "../../icons/CustomIcon";
+import { useAppDispatch } from "../../hooks";
+import { useIsMobile } from "../../utils/muiUtils";
+import { boundsUpdated, mapUpdated } from "../../features/searchSlice";
+import { HideMapIcon } from "../../icons/HideMapIcon";
+import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import { t } from "i18next";
+import Button from "@mui/material/Button";
 
-const MapBtn = ({ handleClick }: { handleClick?: () => void }) => {
-  const [t] = useTranslation();
-
-  //state to update the text
-  const [mapBtnText, setMapBtnText] = useState("");
+const MapBtn = () => {
   const showMap = useSelector((state: RootState) => state.search.map);
+  const dispatch = useAppDispatch();
+  const isMobile = useIsMobile();
 
-  //initialiaze icon
-  const iconUsed = !showMap ? (
-    <CustomIcon name="map" />
+  const iconSize = { fontSize: 22 };
+  const icon = showMap ? (
+    <HideMapIcon sx={iconSize} />
   ) : (
-    <CustomIcon name="list" />
+    <MapOutlinedIcon sx={iconSize} />
   );
 
-  useEffect(() => {
-    // Update button text when language changes
-    setMapBtnText(
-      showMap
-        ? t("main_only.kartenansicht_entfernen")
-        : t("start_pages.zur_kartenansicht"),
-    );
-  }, [showMap, t]);
+  const mapBtnText = isMobile
+    ? icon
+    : showMap
+      ? t("main_only.kartenansicht_entfernen")
+      : t("start_pages.zur_kartenansicht");
+
+  const handleClick = () => {
+    if (showMap) {
+      dispatch(boundsUpdated(null));
+    }
+    dispatch(mapUpdated(!showMap));
+  };
 
   return (
     <Button
+      variant="contained"
+      onClick={handleClick}
+      color="primary"
+      startIcon={isMobile ? undefined : icon} // show icon as main content on mobile
       sx={{
+        padding: "8px 20px",
         position: "fixed",
-        bottom: "20px",
         left: "50%",
         transform: "translateX(-50%)",
-        width: "200px",
-        height: "40px",
         borderRadius: "50px 50px",
-        opacity: 1,
-        backgroundColor: "#101010",
-        color: "#f1f1f1",
-        cursor: "pointer",
-        alignItems: "center", // Align vertically
-        justifyContent: "space-between", // Space content evenly
-        flexDirection: "row", // Text and icon in a row
         margin: "2 auto",
-        "@media (min-width: 900px)": {
-          bottom: "calc(50px - 3%)", // Move down on screens wider than 900px
-        },
+        bottom: "8px",
       }}
-      onClick={handleClick}
-      aria-label="contained"
-      variant="contained"
-      endIcon={iconUsed}
     >
-      <span style={{ paddingLeft: "10px" }}>{mapBtnText}</span>
+      {mapBtnText}
     </Button>
   );
 };

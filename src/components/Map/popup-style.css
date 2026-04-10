@@ -13,44 +13,20 @@
   align-items: center; /* Center items vertically */
   justify-content: center; /* Center items horizontally */
   box-shadow: none;
-  /* border: solid 5px white;
-    border-radius: 15px; */
 }
 
 .request-popup .leaflet-popup-content-wrapper {
-  background: white; /* Remove background from wrapper */
+  background: transparent;
   box-shadow: none; /* Remove box shadow */
-  /* padding:10px; */
-  border-radius: 20px;
 }
 
 .request-popup .leaflet-popup-tip {
   display: none; /* Remove the popup tip */
 }
 
-/* Responsive font sizes for different breakpoints */
-@media (max-width: 1200px) {
-  .tour-card-map {
-    font-size: 14px; /* Adjust font size for screens up to 1200px */
-  }
-}
-
-@media (max-width: 900px) {
-  .tour-card-map {
-    font-size: 12px; /* Adjust font size for screens up to 900px */
-  }
-}
-
-@media (max-width: 600px) {
-  .tour-card-map {
-    font-size: 10px; /* Adjust font size for screens up to 600px */
-  }
-}
-
-@media (max-width: 400px) {
-  .tour-card-map {
-    font-size: 8px; /* Adjust font size for screens up to 400px */
-  }
+.leaflet-container .request-popup a.leaflet-popup-close-button {
+  top: 5px !important;
+  right: 5px !important;
 }
 
 .circle-marker {
@@ -79,4 +55,17 @@
   margin: 0;
   margin-right: 5px;
   max-width: 200px;
+}
+
+/* Fullscreen map container */
+.map-fullscreen-container:fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-height: none !important;
+  background: #f7f7f7;
+}
+
+/* Clickable GPX track polylines */
+.track-clickable {
+  cursor: pointer;
 }

@@ -74,7 +74,7 @@ export function getDefaultBoundsForDomain(domain: string): {
   return { ne: bounds.ne, sw: bounds.sw, center };
 }
 
-export const getMarkersBounds = (markers: Marker[]) => {
+export const getMarkersBounds = (markers: { lat: number; lon: number }[]) => {
   const _bounds = L.latLngBounds([]);
   if (markers.length > 0) {
     markers.forEach((marker) => {

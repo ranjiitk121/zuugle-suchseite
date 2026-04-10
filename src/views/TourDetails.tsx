@@ -45,6 +45,7 @@ import { RootState } from "../";
 import { CustomIcon } from "../icons/CustomIcon";
 import LanguageMenu from "../components/LanguageMenu";
 import Divider from "@mui/material/Divider";
+import Chip from "@mui/material/Chip";
 
 export default function DetailReworked() {
   const [activeConnection, setActiveConnection] =
@@ -140,6 +141,12 @@ export default function DetailReworked() {
   const goToSearchPage = () => {
     navigate(`/search` + (city ? `?city=${city.value}` : ""));
   };
+
+  useEffect(() => {
+    if (city?.value) {
+      navigate(`/tour/${idOne}/${city.value}`);
+    }
+  }, [city]);
 
   const LoadingSpinner = () => (
     <div
@@ -494,169 +501,147 @@ export default function DetailReworked() {
   });
 
   return (
-    <Box sx={{ backgroundColor: "#fff" }}>
+    <>
+      <Box
+        sx={{
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+        }}
+      >
+        <Box className="search-result-header-container">
+          <Box component={"div"} className="rowing">
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box
+                sx={{ mr: "16px", cursor: "pointer" }}
+                onClick={handleCloseTab}
+              >
+                <CustomIcon
+                  name="arrowBefore"
+                  style={{ stroke: "#fff", width: "34px", height: "34px" }}
+                />
+              </Box>
+              <DomainMenu />
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: "16px" }}>
+              <LanguageMenu />
+            </Box>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            mt: "-50px",
+            display: "flex",
+            justifyContent: "center",
+            position: "relative",
+          }}
+        >
+          <Search />
+        </Box>
+      </Box>
       {isTourLoading ? (
         <LoadingSpinner />
       ) : (
-        <>
-          <Box className="newHeader" sx={{ position: "relative" }}>
-            <Box component={"div"} className="rowing blueDiv">
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Box
-                  sx={{ mr: "16px", cursor: "pointer", zIndex: "1301" }}
-                  onClick={handleCloseTab}
-                >
-                  <CustomIcon
-                    name="arrowBefore"
-                    style={{ stroke: "#fff", width: "34px", height: "34px" }}
-                  />
-                </Box>
-                <DomainMenu />
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                <LanguageMenu />
-                <Box
-                  sx={{ mr: "16px", cursor: "pointer", zIndex: "1301" }}
-                  onClick={handleCloseTab}
-                >
-                  <CustomIcon
-                    name="close"
-                    style={{
-                      stroke: "#fff",
-                      fill: "#fff",
-                      width: "24px",
-                      height: "24px",
-                    }}
-                  />
-                </Box>
-              </Box>
-            </Box>
-            {/* search bar ###### section */}
+        <Box>
+          <Box className="tour-detail-header">
             <Box
               sx={{
-                backgroundColor: "#FFF",
-                position: "absolute",
-                bottom: "0",
-                transform: "translate(-50%, 50%)",
-                display: "inline-flex",
-                borderRadius: "20px",
-                padding: "12px 15px",
-                border: "2px solid #ddd",
-                width: "100%",
-                maxWidth: {
-                  xs: "325px",
-                  md: "600px",
-                },
-                boxSizing: "border-box",
-                boxShadow: "rgba(100, 100, 111, 0.3) 0px 3px 20px 0px",
-                zIndex: "1300",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                flexWrap: "wrap",
+                gap: 1,
               }}
             >
-              <Box sx={{ width: "100%" }}>
-                <Search pageKey="detail" isMain={false} />
-              </Box>
+              <Typography variant="title">{tour?.title}</Typography>
+              {city?.label && (
+                <Typography variant="title">
+                  {"|"}
+                  <CustomIcon
+                    name="transportTrain"
+                    style={{
+                      stroke: "none",
+                      marginLeft: "8px",
+                      marginRight: "8px",
+                      marginBottom: "-3px",
+                    }}
+                  />
+                  {t("search.ab_heimatbahnhof")} {city?.label}
+                </Typography>
+              )}
             </Box>
           </Box>
-          <Box>
-            <Box className="tour-detail-header">
-              <Box className="mt-3">
-                <Typography variant="title">{tour?.title}</Typography>
+          <Box sx={{ backgroundColor: "#fff" }}>
+            {track && (
+              <Box
+                sx={{ width: "100%", position: "relative" }}
+                className="tour-detail-map-container"
+              >
+                <Chip
+                  sx={{
+                    position: "absolute",
+                    top: 10,
+                    left: 10,
+                    bgcolor: "#000",
+                    color: "#C5C5C5",
+                    fontSize: 12,
+                    zIndex: 5,
+                  }}
+                  label={`${tour?.range}`}
+                />
+                <InteractiveMap
+                  gpxPositions={track || []}
+                  anreiseGpxPositions={toTourTrack || []}
+                  abreiseGpxPositions={fromTourTrack || []}
+                  scrollWheelZoom={false}
+                />
               </Box>
-              <Box className="mt-3">
-                <span className="tour-detail-tag">{tour?.range}</span>
-              </Box>
-            </Box>
-            <div>
-              {track && (
-                <Box
-                  sx={{ width: "100%", position: "relative" }}
-                  className="tour-detail-map-container"
+            )}
+
+            <div className="tour-detail-data-container">
+              <Box>
+                <TourDetailProperties tour={tour}></TourDetailProperties>
+                <Box sx={{ textAlign: "left" }}>
+                  <div className="tour-detail-difficulties">
+                    <span className="tour-detail-difficulty">
+                      {tourDifficulty && translateDiff(tourDifficulty)}
+                    </span>
+                  </div>
+                  <Typography variant="textSmall">
+                    {tour?.description}
+                  </Typography>
+                </Box>
+                <a
+                  className="tour-detail-provider-container"
+                  href={providerUrl()}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ textDecoration: "none" }}
                 >
-                  <InteractiveMap
-                    gpxPositions={track || []}
-                    anreiseGpxPositions={toTourTrack || []}
-                    abreiseGpxPositions={fromTourTrack || []}
-                    scrollWheelZoom={false}
-                  />
-                </Box>
-              )}
-              <div className="tour-detail-data-container">
-                <Box>
-                  <TourDetailProperties tour={tour}></TourDetailProperties>
-                  <Box sx={{ textAlign: "left" }}>
-                    <div className="tour-detail-difficulties">
-                      <span className="tour-detail-difficulty">
-                        {tourDifficulty && translateDiff(tourDifficulty)}
-                      </span>
-                    </div>
-                    <Typography variant="textSmall">
-                      {tour?.description}
-                    </Typography>
-                  </Box>
-                  <a
-                    className="tour-detail-provider-container"
-                    href={providerUrl()}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{ textDecoration: "none" }}
-                  >
-                    <div className="tour-detail-provider-icon">
-                      {!!tour && (
-                        <img
-                          src={`/app_static/icons/provider/logo_${tour.provider}.svg`}
-                          alt={tour.provider_name}
-                          style={{
-                            borderRadius: "100%",
-                            height: "48px",
-                            width: "48px",
-                          }}
-                        />
-                      )}
-                    </div>
-                    <div className="tour-detail-provider-name-link">
-                      <span className="tour-detail-provider-name">
-                        {tour?.provider_name}
-                      </span>
-                      <span className="tour-detail-provider-link">
-                        {tour?.url}
-                      </span>
-                    </div>
-                  </a>
-                  {tour?.valid_tour === 1 && (
-                    <Box className="tour-detail-conditional-desktop">
-                      <Divider variant="middle" />
-                      <div className="tour-detail-img-container">
-                        <img
-                          src={tour?.image_url ?? ""}
-                          onError={(e) => {
-                            e.currentTarget.style.display = "none";
-                          }}
-                          alt={tour?.title}
-                          style={{
-                            display: tour?.image_url ? "block" : "none",
-                          }}
-                        />
-                      </div>
-                    </Box>
-                  )}
-                  {city && idOne && (
-                    <Box className="tour-detail-conditional-desktop">
-                      {actionButtonPart}
-                    </Box>
-                  )}
-                </Box>
-                <Box className="tour-detail-itinerary-container">
-                  <Itinerary
-                    connectionData={connections}
-                    dateIndex={dateIndex}
-                    updateConnIndex={updateConnIndex}
-                    tour={tour}
-                    city={city?.value}
-                    idOne={idOne}
-                  />
-                </Box>
+                  <div className="tour-detail-provider-icon">
+                    {!!tour && (
+                      <img
+                        src={`/app_static/icons/provider/logo_${tour.provider}.svg`}
+                        alt={tour.provider_name}
+                        style={{
+                          borderRadius: "100%",
+                          height: "48px",
+                          width: "48px",
+                        }}
+                      />
+                    )}
+                  </div>
+                  <div className="tour-detail-provider-name-link">
+                    <span className="tour-detail-provider-name">
+                      {tour?.provider_name}
+                    </span>
+                    <span className="tour-detail-provider-link">
+                      {tour?.url}
+                    </span>
+                  </div>
+                </a>
                 {tour?.valid_tour === 1 && (
-                  <Box className="tour-detail-conditional-mobile">
+                  <Box className="tour-detail-conditional-desktop">
                     <Divider variant="middle" />
                     <div className="tour-detail-img-container">
                       <img
@@ -665,23 +650,54 @@ export default function DetailReworked() {
                           e.currentTarget.style.display = "none";
                         }}
                         alt={tour?.title}
-                        style={{ display: tour?.image_url ? "block" : "none" }}
+                        style={{
+                          display: tour?.image_url ? "block" : "none",
+                        }}
                       />
                     </div>
                   </Box>
                 )}
-                {tour?.valid_tour === 1 && city && idOne && (
-                  <Box className="tour-detail-conditional-mobile">
+                {city && idOne && (
+                  <Box className="tour-detail-conditional-desktop">
                     {actionButtonPart}
                   </Box>
                 )}
-              </div>
+              </Box>
+              <Box className="tour-detail-itinerary-container">
+                <Itinerary
+                  connectionData={connections}
+                  dateIndex={dateIndex}
+                  updateConnIndex={updateConnIndex}
+                  tour={tour}
+                  city={city?.value}
+                  idOne={idOne}
+                />
+              </Box>
+              {tour?.valid_tour === 1 && (
+                <Box className="tour-detail-conditional-mobile">
+                  <Divider variant="middle" />
+                  <div className="tour-detail-img-container">
+                    <img
+                      src={tour?.image_url ?? ""}
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                      }}
+                      alt={tour?.title}
+                      style={{ display: tour?.image_url ? "block" : "none" }}
+                    />
+                  </div>
+                </Box>
+              )}
+              {tour?.valid_tour === 1 && city && idOne && (
+                <Box className="tour-detail-conditional-mobile">
+                  {actionButtonPart}
+                </Box>
+              )}
             </div>
-            <div></div>
           </Box>
           <Footer></Footer>
-        </>
+        </Box>
       )}
-    </Box>
+    </>
   );
 }
