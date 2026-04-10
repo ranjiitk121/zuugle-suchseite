@@ -555,23 +555,19 @@ export default function DetailReworked() {
             >
               <Typography variant="title">{tour?.title}</Typography>
               {city?.label && (
-                <Box
-                  sx={{
-                    "& path": { fill: (theme) => theme.palette.primary.dark },
-                  }}
-                >
-                  <Typography variant="title" color="primary.dark">
-                    {t("search.ab_heimatbahnhof")} {city?.label}
-                  </Typography>
+                <Typography variant="title">
+                  {"|"}
                   <CustomIcon
                     name="transportTrain"
                     style={{
                       stroke: "none",
                       marginLeft: "8px",
+                      marginRight: "8px",
                       marginBottom: "-3px",
                     }}
                   />
-                </Box>
+                  {t("search.ab_heimatbahnhof")} {city?.label}
+                </Typography>
               )}
             </Box>
           </Box>
