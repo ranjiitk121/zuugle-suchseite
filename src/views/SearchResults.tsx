@@ -13,13 +13,9 @@ import { useTranslation } from "react-i18next";
 import MapBtn from "../components/Search/MapBtn";
 import { useGetCitiesQuery, useLazyGetToursQuery } from "../features/apiSlice";
 import { Tour } from "../models/Tour";
-import { RootState } from "../";
+import { RootState } from "..";
 import SearchParamSync from "../components/SearchParamSync";
-import {
-  boundsUpdated,
-  cityUpdated,
-  mapUpdated,
-} from "../features/searchSlice";
+import { cityUpdated } from "../features/searchSlice";
 import { useAppDispatch } from "../hooks";
 import TourCardContainer from "../components/TourCardContainer";
 import Search from "../components/Search/Search";
@@ -30,11 +26,12 @@ import {
   usePageHeader,
 } from "../utils/seoPageHelper";
 import { CustomIcon } from "../icons/CustomIcon";
-import { hasContent } from "../utils/globals";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
+import Filter from "../components/Filter/Filter";
+import TotalToursHeader from "../components/TotalToursHeader";
 
-export default function Main() {
+export default function SearchResults() {
   const { t } = useTranslation();
   const filter = useSelector((state: RootState) => state.filter);
   const search = useSelector((state: RootState) => state.search);
@@ -69,9 +66,11 @@ export default function Main() {
     setPageTours(1);
     setHasMore(true);
     const params = {
-      city: search.citySlug || "",
+      city:
+        search.citySlug && search.citySlug !== "no-city" ? search.citySlug : "",
       filter: filter,
-      search: search.searchPhrase || "",
+      search: search.searchWithType?.term || null,
+      search_type: search.searchWithType?.type || null,
       bounds: search.bounds || undefined,
       map: showMap || undefined,
       provider: search.provider || undefined,
@@ -94,9 +93,13 @@ export default function Main() {
   useEffect(() => {
     if (pageTours > 1) {
       const moreTours = triggerMoreTours({
-        city: search.citySlug || "",
+        city:
+          search.citySlug && search.citySlug !== "no-city"
+            ? search.citySlug
+            : "",
         filter: filter,
-        search: search.searchPhrase || "",
+        search: search.searchWithType?.term || "",
+        search_type: search.searchWithType?.type || "",
         bounds: search.bounds || undefined,
         map: showMap || undefined,
         provider: search.provider || undefined,
@@ -115,10 +118,6 @@ export default function Main() {
   }, [pageTours]);
 
   const [directLink, setDirectLink] = useState<DirectLink | null>(null);
-
-  const activeFilter = useSelector(
-    (state: RootState) => hasContent(filter) || state.search.geolocation,
-  );
 
   const { data: allCities = [] } = useGetCitiesQuery();
 
@@ -147,16 +146,7 @@ export default function Main() {
   }, [location, allCities]);
 
   const renderCardContainer = () => (
-    <Box
-      className="cards-container"
-      sx={{
-        marginTop: {
-          xs: marginTopCards,
-          md: marginTopCards,
-        },
-        padding: "25px",
-      }}
-    >
+    <Box className="cards-container">
       <TourCardContainer
         tours={tours}
         hasMore={hasMore}
@@ -165,85 +155,36 @@ export default function Main() {
     </Box>
   );
 
-  const marginTopCards = showMap ? "20px" : "140px";
-
-  const totalToursHeader = () => (
-    <Box className={"header-line-main"} sx={{ width: "100%" }}>
-      <Box
-        sx={{
-          paddingTop: showMap ? "3.3%" : "10.2%",
-          paddingBottom: "5.5px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          "@media (min-width: 900px)": {
-            paddingTop: showMap ? "1.42%" : "2.36%",
-            // paddingTop: largeScreenPaddingTop,
-          },
-        }}
-      >
-        {loadedTours?.total != undefined && (
-          <>
-            <Typography
-              color={"black"}
-              sx={{ textAlign: "center", paddingTop: "0px" }}
-            >
-              {Number(loadedTours.total).toLocaleString()}
-              {loadedTours.total === 1
-                ? ` ${t("main.ergebnis")}`
-                : ` ${t("main.ergebnisse")}`}
-            </Typography>
-            {activeFilter && (
-              <Box display={"flex"} alignItems={"center"}>
-                &nbsp;{" - "}&nbsp;
-                <Typography
-                  sx={{
-                    fontSize: "16px",
-                    color: "#FF7663",
-                    fontWeight: "600",
-                    mr: "2px",
-                  }}
-                  className={"cursor-link"}
-                  onClick={() => setFilterOn(true)}
-                >
-                  {t("filter.filter")}
-                </Typography>
-              </Box>
-            )}
-          </>
-        )}
-      </Box>
-    </Box>
-  );
-
   return (
     <div>
-      <SearchParamSync isMain={true} />
-      <Box sx={{ width: "100%" }} className={"search-result-header-container"}>
-        {!!directLink && (
-          <Box className={"seo-bar"}>
-            <Typography
-              variant={"h1"}
-              sx={{ color: "#fff", fontSize: "18px", marginBottom: "5px" }}
-            >
-              {directLink.header}
-            </Typography>
-            <Typography variant={"h2"} sx={{ fontSize: "14px", color: "#fff" }}>
-              {directLink.description}
-            </Typography>
-          </Box>
-        )}
-        <Box
-          className="newHeader"
-          sx={{
-            height: {
-              xs: "110px",
-              md: "110px",
-            },
-          }}
-          position={"relative"}
-        >
-          <Box component={"div"} className="rowing blueDiv">
+      <SearchParamSync isSearchResultsPage={true} />
+      <Filter showFilter={filterOn} setShowFilter={setFilterOn} />
+      <Box
+        sx={{
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          backgroundColor: "#f7f7f7",
+        }}
+      >
+        <Box className={"search-result-header-container"}>
+          {!!directLink && (
+            <Box className={"seo-bar"}>
+              <Typography
+                variant={"h1"}
+                sx={{ color: "#fff", fontSize: "18px", marginBottom: "5px" }}
+              >
+                {directLink.header}
+              </Typography>
+              <Typography
+                variant={"h2"}
+                sx={{ fontSize: "14px", color: "#fff" }}
+              >
+                {directLink.description}
+              </Typography>
+            </Box>
+          )}
+          <Box component={"div"} className="rowing">
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Box sx={{ mr: "16px", cursor: "pointer" }}>
                 <Link
@@ -260,46 +201,21 @@ export default function Main() {
             </Box>
             <LanguageMenu />
           </Box>
-          {!!allCities && allCities.length > 0 && (
-            <Box
-              alignItems={"center"}
-              justifyContent={"center"}
-              display="inline-block"
-              sx={{
-                position: "absolute",
-                bottom: "0",
-                left: "50%",
-                transform: "translate(-50%,50%)",
-                backgroundColor: "#FFF",
-                borderRadius: "15px",
-                padding: "12px 24px",
-                border: "2px solid #ddd",
-                boxShadow: "rgba(100, 100, 111, 0.3) 0px 3px 20px 0px",
-                boxSizing: "border-box",
-                width: {
-                  md: "600px",
-                  lg: "600px",
-                },
-                maxWidth: {
-                  xs: "325px",
-                  md: "600px",
-                },
-              }}
-            >
-              <Box className={"colCenter"}>
-                <Search
-                  pageKey="main"
-                  isMain={true}
-                  setFilterOn={setFilterOn}
-                  filterOn={filterOn}
-                />
-              </Box>
-            </Box>
-          )}
         </Box>
-        {!showMap && totalToursHeader()}
+        {!!allCities && allCities.length > 0 && (
+          <Box
+            sx={{
+              mt: "-50px",
+              display: "flex",
+              justifyContent: "center",
+              position: "relative",
+            }}
+          >
+            <Search setFilterOn={setFilterOn} />
+          </Box>
+        )}
+        <TotalToursHeader loadedTours={loadedTours} />
       </Box>
-
       {showMap && (
         <Box className={"map-container"}>
           <Suspense
@@ -309,21 +225,14 @@ export default function Main() {
           >
             <TourMapContainer
               markers={loadedTours?.markers || []}
+              pois={loadedTours?.pois || []}
               isLoading={isToursLoading}
             />
           </Suspense>
         </Box>
       )}
-      {totalToursHeader()}
       {!!tours && tours.length > 0 && renderCardContainer()}
-      <MapBtn
-        handleClick={() => {
-          if (showMap) {
-            dispatch(boundsUpdated(null));
-          }
-          dispatch(mapUpdated(!showMap));
-        }}
-      />
+      <MapBtn />
     </div>
   );
 }

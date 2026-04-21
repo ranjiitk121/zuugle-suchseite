@@ -81,13 +81,18 @@ function LanguageMenu() {
           >
             <div
               className="rowing"
-              style={{ width: "100%", marginBottom: -15 }}
+              style={{
+                width: "100%",
+                marginBottom: -30,
+                paddingRight: 10,
+                paddingTop: 5,
+              }}
             >
               <div />{" "}
               <span
                 className="closeIcon pointy"
+                style={{ zIndex: 1 }}
                 onClick={() => setShowLanguageMenu(false)}
-                style={{ marginRight: 5 }}
               >
                 <CloseIcon
                   sx={{

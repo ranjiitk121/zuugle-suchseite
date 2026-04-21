@@ -26,6 +26,11 @@ export default function TourCardContainer({
   const provider = useSelector((state: RootState) => state.search.provider);
   const LOADER_HEIGHT = 40;
 
+  const gridItemStyles = {
+    justifyContent: "center",
+    display: "grid",
+  };
+
   useEffect(() => {
     function needsMoreContent() {
       return (
@@ -51,7 +56,12 @@ export default function TourCardContainer({
         >
           <Grid container spacing={2} direction="row" sx={{ p: 1 }}>
             {tours.map((tour, index) => (
-              <Grid display="flex" key={index} size={{ xs: 12, md: 6, lg: 4 }}>
+              <Grid
+                display="flex"
+                key={index}
+                size={{ xs: 12, md: 6, lg: 4 }}
+                sx={gridItemStyles}
+              >
                 <TourCard
                   tour={tour}
                   city={city?.value || null}

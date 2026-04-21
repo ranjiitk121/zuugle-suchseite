@@ -6,17 +6,20 @@ import L from "leaflet";
 import { RootState } from "../..";
 import { Marker } from "../../models/mapTypes";
 import { LocationWithRadius } from "../../features/searchSlice";
+import { PoiResult } from "../../features/apiSlice";
 
 export interface MapBoundsUpdaterProps {
   isUserMoving: boolean;
   geolocation: LocationWithRadius | null;
   markers: Marker[];
+  pois: PoiResult[];
   markersInvalidated: boolean;
 }
 export function MapBoundsUpdater({
   isUserMoving,
   geolocation,
   markers,
+  pois,
   markersInvalidated,
 }: MapBoundsUpdaterProps) {
   const map = useMap();
@@ -52,7 +55,14 @@ export function MapBoundsUpdater({
       markerBounds.extend(circleSearchBounds);
       map.fitBounds(markerBounds, { animate: true });
     }
-  }, [bounds, geolocation, markers]);
+    // case 3: poi search is active and tours are loaded
+    if (pois.length > 0 && !markersInvalidated) {
+      const markerBounds = getMarkersBounds(markers);
+      const poiBounds = getMarkersBounds(pois);
+      markerBounds.extend(poiBounds);
+      map.fitBounds(markerBounds, { animate: true });
+    }
+  }, [bounds, geolocation, markers, pois, markersInvalidated]);
 
   return null;
 }

@@ -65,6 +65,12 @@
     "hard": "Hard",
     "unknown": "Unknown",
     "provider": "Tour portal",
+    "hut_filter_suggestion": "Find tours with this hut",
+    "peak_filter_suggestion": "Find tours with this peak",
+    "region_filter_suggestion": "Set filter for this region",
+    "region_filter_helper": "region filter",
+    "term_filter_suggestion": "Search for this term",
+    "city_filter_suggestion": "Show tours reachable from this city",
     "geolocation_search": "Geolocation search",
     "geolocation_search_warning": "invalid coordinates",
     "countries": "Countries",
@@ -261,6 +267,7 @@
     "bitte_stadt_waehlen": "Please select a city (city of residence or near your place of residence) so that we can show your timetables."
   },
   "search": {
+    "go": "Go!",
     "search": "Search",
     "abbrechen": "Abort",
     "dein_heimatbahnhof": "Your main railway station",
@@ -271,6 +278,6 @@
     "oeffi_touren_alpenraum": "Hikes reachable using public transport",
     "keine_vorschlaege": "No Suggestions"
   },
-  "start_pages": { "zur_kartenansicht": "Go to map" },
-  "main_only": { "kartenansicht_entfernen": "Go to list view" }
+  "start_pages": { "zur_kartenansicht": "Show map" },
+  "main_only": { "kartenansicht_entfernen": "Hide map" }
 }
